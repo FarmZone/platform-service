@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+
+{% block userlinks %}
+  {{ block.super }}
+  {% if not request.user.is_verified and request.user.is_superuser %}
+    /&nbsp;
+    <a><strong>Enable 2FA</strong></a>
+  {% endif %}
+{% endblock %}
