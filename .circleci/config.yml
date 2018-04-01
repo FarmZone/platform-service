@@ -43,16 +43,16 @@ jobs:
       # other common Python testing frameworks include pytest and nose
       # https://pytest.org
       # https://nose.readthedocs.io
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            python manage.py test --verbosity=0 || echo "=======Completed====="
-            coverage html -i
-
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+#      - run:
+#          name: run tests
+#          command: |
+#            . venv/bin/activate
+#            python manage.py test --verbosity=0 || echo "=======Completed====="
+#            coverage html -i
+#
+#      - store_artifacts:
+#          path: test-reports
+#          destination: test-reports
 
       - run:
           name: Download EB_CLI
