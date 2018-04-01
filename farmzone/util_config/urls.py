@@ -9,6 +9,7 @@ from farmzone.authentication.views import UserViewSet
 from .swagger_customization import get_swagger_view
 from farmzone.authentication import v1_urls as v1_authentication_urls
 from farmzone.sellers import v1_urls as v1_seller_urls
+from farmzone.buyers import v1_urls as v1_buyer_urls
 from ajax_select import urls as ajax_select_urls
 
 router = DefaultRouter()
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'^swagger/$', schema_view),
     url(r'^api/v1/', include(v1_authentication_urls)),
     url(r'^api/v1/', include(v1_seller_urls)),
+    url(r'^api/v1/', include(v1_buyer_urls)),
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

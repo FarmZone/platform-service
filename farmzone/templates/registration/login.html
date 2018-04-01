@@ -1,0 +1,40 @@
+{% extends "../orders/main.html" %}
+
+{% block style %}
+	<link href="/static/login.css" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block content %}
+    <div id="content-container" class="container p-none">
+        <div class="lgn-container col-lg-8">
+          <h4 class="center-align welcome-label">Welcome to Trringology</h4>
+            <form class="row" id="login-form" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="card login-box">
+                  <table class="table login-table">
+                      <tr>
+                          <td><label class="card-label" for="id_username">Username</label></td>
+                          <td><input id="id_username" name="username"
+                                     type="text" class="form-control"></td>
+                      </tr>
+                      <tr>
+                          <td><label class="card-label" for="id_password">Password</label></td>
+                          <td><input id="id_password" name="password"
+                                     type="password" class="form-control"></td>
+                      </tr>
+                  </table>
+                  {% if form.errors %}
+                      <p class=" label label-danger">
+                          Your username and password didn't match.
+                          Please try again.
+                      </p>
+                  {% endif %}
+
+                  <input type="submit" value="Login"
+                         class="btn btn-primary login-button" />
+                  <input type="hidden" name="next" value="{{ next }}" />
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<link rel="stylesheet" href="{% static 'bars-movie.css' %}">
+<link rel="stylesheet" href="{% static 'order.css' %}">
+{% endblock %}
+{% block navbar_content %}
+<ul class="col s8 navbar-content">
+  <li><a class="role-name">Agent</a></li>
+</ul>
+{% endblock %}
+{% block main_content %}
+<div class="main-content">
+  <div class="container small-container">
+  {% block content %} {% endblock %}
+  </div>
+</div>
+{% endblock %}
+{% block sidenav-content %}
+<li><a id="active-link" class="agent-nav-bar app-link" href="/cca/orders">Place Order</a></li>
+<li><a class="app-link" href="/cca/customer-feedback">Feedback</a></li>
+{% endblock %}
+{% block script %}
+{% block map_script %}{% endblock %}
+{% endblock %}

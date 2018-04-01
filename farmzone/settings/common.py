@@ -62,7 +62,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # ElasticBeanstalk healthcheck sends requests with host header = internal ip
 # So we detect if we are in elastic beanstalk,
 # and add the instances private ip address
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.175.7.255' , '192.175.4.44']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.1.0.230' , '192.175.4.44']
 private_ip = get_linux_ec2_private_ip()
 if private_ip:
     ALLOWED_HOSTS.append(private_ip)
@@ -96,6 +96,9 @@ INSTALLED_APPS = [
     'farmzone.core',
     'farmzone.sellers',
     'farmzone.catalog',
+    'farmzone.order',
+    'farmzone.buyers',
+    'farmzone.support',
     #'trringo.suppliers',
 #    'farmzone.send_push_notifications',
     'farmzone.authentication',

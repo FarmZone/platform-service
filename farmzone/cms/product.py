@@ -104,3 +104,14 @@ def get_seller_product_detail(seller_code, product_code):
     result = execute_query(seller_product_detail_sql.format(seller_code, product_code))
     logger.debug("seller {0}, product_code {1} product_detail {2}".format(seller_code, product_code, result))
     return format_products(result)
+
+
+cart_detail_sql = seller_product_general_sql + """
+and ssp.id in ({0})
+"""
+
+
+def get_cart_product_detail(seller_subproduct_ids):
+    result = execute_query(cart_detail_sql.format(seller_subproduct_ids))
+    logger.debug("seller_subproduct_ids {0} & Cart detail {1}".format(seller_subproduct_ids, result))
+    return format_products(result)

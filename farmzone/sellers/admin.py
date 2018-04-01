@@ -24,11 +24,11 @@ class PreferredSellerAdmin(admin.ModelAdmin):
 
 class SellerSubProductAdmin(admin.ModelAdmin):
     model = SellerSubProduct
-    list_display = ['seller', 'sub_product', 'price', 'is_active']
+    list_display = ['seller', 'sub_product', 'price', 'discount', 'is_active']
 
     def get_readonly_fields(self, request, obj=None):
         if obj: # editing an existing object
-            return self.readonly_fields + ('seller', 'sub_product', 'price')
+            return self.readonly_fields + ('seller', 'sub_product', 'price', 'discount', 'is_active')
         return self.readonly_fields
 
 
