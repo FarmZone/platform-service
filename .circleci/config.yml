@@ -1,59 +1,41 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
 version: 2
 jobs:
   build:
+    working_directory: ~/code
     docker:
       - image: circleci/python:3.6.1
         environment:
         - DATABASE_URL=mysql://root@127.0.0.1:3306/circle_test
       - image: circleci/mysql:5.7
-
-    working_directory: ~/repo
-
     branches:
       only:
         - stage
         - master
-
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - requirements-{{ .Branch }}-{{ checksum "requirements/local.txt" }}-{{ checksum "requirements/base.txt" }}
 
       - run:
-          name: install dependencies
+          name: Download requirements.txt
           command: |
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements/local.txt
-
       - save_cache:
+          name: requirements-cache
+          key: requirements-{{ .Branch }}-{{ checksum "requirements/local.txt" }}-{{ checksum "requirements/base.txt" }}
           paths:
             - "venv"
-          key: requirements-{{ .Branch }}-{{ checksum "requirements/local.txt" }}-{{ checksum "requirements/base.txt" }}
-        
-      # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
-          name: run tests
+          name: Running Tests with Coverage
           command: |
             . venv/bin/activate
             python manage.py test --verbosity=0 || echo "=======Completed====="
             coverage html -i
-
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
-
+          path: htmlcov
       - run:
           name: Download EB_CLI
           command: sudo pip install awsebcli
