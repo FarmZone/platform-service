@@ -282,7 +282,7 @@ LOGGING = {
             'when': 'midnight',
             'backupCount': 10,
             'filters': ['skip_unknown_host_error'],
-            'filename': os.path.join(LOG_DIR, 'logs/farmzone.log'),
+            'filename': os.path.join(LOG_DIR, 'farmzone.log'),
             'formatter': 'verbose',
             'encoding': 'utf-8'
         },
@@ -296,7 +296,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'backupCount': 10,
-            'filename': os.path.join(LOG_DIR, 'logs/queries.log'),
+            'filename': os.path.join(LOG_DIR, 'queries.log'),
             'filters': ['require_debug_true'],
             'formatter': 'verbose',
             'encoding': 'utf-8'
@@ -309,7 +309,7 @@ LOGGING = {
         'celery_handler': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'logs/celery-worker.log'),
+            'filename': os.path.join(LOG_DIR, 'celery-worker.log'),
             'formatter': 'verbose',
             'maxBytes': 1024 * 1024 * 100,  # 100 mb
             'encoding': 'utf-8',
