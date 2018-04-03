@@ -3,9 +3,7 @@ from .common import *
 DEBUG = True
 ALLOWED_HOSTS = [
                  'localhost', '127.0.0.1',
-                 'farmzone-stage.madu4xnwhw.ap-south-1.elasticbeanstalk.com',
-                 'farmzone-prod.madu4xnwhw.ap-south-1.elasticbeanstalk.com',
-                 'farmzone-qa.ap-south-1.elasticbeanstalk.com'
+                 'farmzone-dev.ap-south-1.elasticbeanstalk.com'
                ]
 
 CSRF_COOKIE_SECURE = False
