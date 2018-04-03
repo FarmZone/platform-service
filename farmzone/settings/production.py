@@ -1,6 +1,6 @@
 from .common import *
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
                  'localhost', '127.0.0.1',
                  'farmzone-stage.madu4xnwhw.ap-south-1.elasticbeanstalk.com',
