@@ -26,7 +26,7 @@ class ProductDetailInlineAdmin(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     model = Product
     fieldsets = (
-        (None, {'fields': ('product_code', 'name', 'product_category', 'display_name', 'description')}),
+        (None, {'fields': ('product_code', 'name', 'product_category', 'display_name', 'img_orig', 'img_thumb', 'description')}),
     )
     list_display = ['product_code', 'product_category', 'name', 'display_name', 'description']
     readonly_fields = ('product_code',)
