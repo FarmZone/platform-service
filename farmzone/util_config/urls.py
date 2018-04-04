@@ -20,7 +20,8 @@ schema_view = get_swagger_view(title='Farmzone APIs')
 
 urlpatterns = [
     url(r'^ajax_select/', include(ajax_select_urls)),
-    url(r'^django-admin/', admin.site.urls),
+    # url(r'^django-admin/', admin.site.urls),
+    url(r'^', admin.site.urls),
     url(r'^accounts/login/$', auth_views.login, name='login'),
     url(r'^swagger/$', schema_view),
     url(r'^api/v1/', include(v1_authentication_urls)),
