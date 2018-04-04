@@ -1,0 +1,27 @@
+.login-box {
+  width: 52%;
+  margin: 7% 0 5% 27%;
+  padding: 2%;
+  border: solid 1px #9e9e9e;
+  border-radius: 8px; }
+  .login-box .login-table td label {
+    color: #000; }
+  .login-box .card-label {
+    font-size: 15px; }
+
+.login-button {
+  margin-left: 40%; }
+
+.welcome-label {
+  color: #26a69a; }
+
+.chrome-msg {
+  position: fixed;
+  bottom: 15px;
+  color: grey;
+  left: 31%; }
+
+.login-msg a {
+  text-decoration: underline; }
+
+/*# sourceMappingURL=login.css.map */
