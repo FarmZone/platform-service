@@ -131,7 +131,7 @@ class VerifyOTPView(APIView):
         otp = request.data.get('otp')
         mobile_number = request.data.get('mobile_number')
         session_id = request.data.get('session_id')
-
+        logger.info("otp {0}, mobile_number {1}, session_id {2}".format(otp, mobile_number, session_id))
         if otp and session_id and mobile_number:
             if otp_provider.verify_otp(session_id, otp):
                 try:
