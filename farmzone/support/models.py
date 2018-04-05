@@ -31,10 +31,10 @@ post_save.connect(update_support_category_code, sender=SupportCategory)
 
 
 class SupportStatus(ModelEnum):
-    NEW = "New"
-    ACCEPTED = "Accepted"
-    REJECTED = "Rejected"
-    COMPLETED = "Resolved"
+    NEW = "NEW"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
+    RESOLVED = "RESOLVED"
 
 
 class Support(TimestampedModel):
