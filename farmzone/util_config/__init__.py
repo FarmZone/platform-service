@@ -6,6 +6,7 @@ from uuid import uuid4
 import string
 from random import choice, randint
 from enum import unique as unique_enum, Enum
+import arrow
 logger = logging.getLogger(__name__)
 
 
@@ -110,3 +111,5 @@ class ModelEnum(Enum):
 CustomEnum = ModelEnum
 
 
+def utc_standard_format_to_preferred_tz_timestp(date):
+    return arrow.get(date).to(settings.PREFERRED_TIMEZONE).timestamp

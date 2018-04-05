@@ -1,7 +1,7 @@
 from farmzone.order.models import OrderDetail, Orders
 from collections import OrderedDict
 from farmzone.util_config.db import execute_query
-from farmzone.util_config import generate_public_s3_access_url
+from farmzone.util_config import generate_public_s3_access_url, utc_standard_format_to_preferred_tz_timestp
 import logging
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ select p.product_code, sp.name as sub_product_name, s.seller_code, s.name as sel
 , sp.sub_product_code, p.name as product_name, c.name as category_name , c.category_code as category_code
 , p.img_orig as product_img_orig, sp.img_orig as sub_product_img_orig
 , p.img_thumb as product_img_thumb, sp.img_thumb as sub_product_img_thumb
-, o.total_price, od.price, od.discount, od.status, od.qty, o.id 
+, o.total_price, od.price, od.discount, od.status, od.qty, o.id, o.created_at 
 , u.full_name, u.email, ph.phone_number
 from orders o inner join order_detail od on o.id=od.order_id 
 inner join seller_sub_product ssp on ssp.id=od.seller_sub_product_id 
@@ -32,6 +32,8 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
         order = order_map[item.id]
         order["id"] = item.id
         order["total_price"] = item.total_price
+        order["created_at"] = utc_standard_format_to_preferred_tz_timestp(item.created_at)
+        order["user"] = {"full_name": item.full_name, "email": item.email, "phone_number": item.phone_number}
         if product_count_map and product_count_map[item.id]:
             order["product_count"] = product_count_map[item.id]
         products = order["products"]
@@ -50,7 +52,6 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
         sub_product_map["discount"] = item.discount
         sub_product_map["status"] = item.status
         sub_product_map["qty"] = item.qty
-        sub_product_map["user"] = {"full_name": item.full_name, "email": item.email, "phone_number":item.phone_number}
         products.append(sub_product_map)
     orders = []
     for key in order_map:
