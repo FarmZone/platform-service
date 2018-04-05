@@ -72,7 +72,7 @@ def generate_public_s3_access_url(file_path, bucket_name=None, region=None):
     if not region:
         region = settings.AWS_REGION
 
-    return "https://s3-{0}.amazonaws.com/{1}/{2}".format(region, bucket_name, file_path)
+    return "http://s3-{0}.amazonaws.com/{1}/{2}".format(region, bucket_name, file_path)
 
 
 @unique_enum
