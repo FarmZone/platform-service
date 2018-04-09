@@ -139,3 +139,18 @@ class ProductDetail(TimestampedModel):
 
     def __str__(self):
         return "{0}#{1}".format(self.key, self.value)
+
+
+class SubProductDetail(TimestampedModel):
+    sub_product = models.ForeignKey(SubProduct)
+    key = models.CharField(max_length=50, blank=True, null=True)
+    value = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sub_product_detail"
+        verbose_name = "Sub Product Detail"
+        verbose_name_plural = "Sub Product Details"
+        unique_together = ('sub_product', 'key')
+
+    def __str__(self):
+        return "{0}#{1}".format(self.key, self.value)

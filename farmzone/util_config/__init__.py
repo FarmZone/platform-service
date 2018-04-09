@@ -113,3 +113,16 @@ CustomEnum = ModelEnum
 
 def utc_standard_format_to_preferred_tz_timestp(date):
     return arrow.get(date).to(settings.PREFERRED_TIMEZONE).timestamp
+
+
+def str_to_key_value(input, separator=','):
+    if not input:
+        return input
+    output = {}
+    key_val_list = input.split(separator)
+    for pair in key_val_list:
+        key_val = pair.split(":")
+        key = key_val[0]
+        val = key_val[1] if len(key_val)>1 else None
+        output[key] = val
+    return output

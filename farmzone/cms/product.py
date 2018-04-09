@@ -1,6 +1,6 @@
 from farmzone.util_config.db import execute_query
 from farmzone.sellers.models import SellerSubProduct
-from farmzone.util_config import generate_public_s3_access_url
+from farmzone.util_config import generate_public_s3_access_url, str_to_key_value
 from django.db.models import Count
 from collections import OrderedDict
 import logging
@@ -10,7 +10,7 @@ seller_product_general_sql = """
 select p.product_code, sp.name as sub_product_name, s.seller_code, s.name as seller_name
 , sp.sub_product_code, p.name as product_name, c.name as category_name, ssp.price , c.category_code as category_code
 , p.img_orig as product_img_orig, sp.img_orig as sub_product_img_orig
-, p.img_thumb as product_img_thumb, sp.img_thumb as sub_product_img_thumb
+, p.img_thumb as product_img_thumb, sp.img_thumb as sub_product_img_thumb, null as specifications 
 from sellers s inner join seller_sub_product ssp on ssp.seller_id=s.id 
 inner join sub_product sp on sp.id=ssp.sub_product_id inner join product p on p.id=sp.product_id 
 inner join product_category c on c.id=p.product_category_id 
@@ -45,6 +45,7 @@ def format_products(result, product_count_map=None, offset=None, count=None):
         sub_product_map["sub_product_name"] = item.sub_product_name
         sub_product_map["img_orig"] = generate_public_s3_access_url(item.sub_product_img_orig)
         sub_product_map["img_thumb"] = generate_public_s3_access_url(item.sub_product_img_thumb)
+        sub_product_map["specifications"] = str_to_key_value(item.specifications) if item.specifications else {}
         sub_products.append(sub_product_map)
     categories = []
     for key in product_map:
@@ -95,8 +96,20 @@ def get_seller_products_by_category(seller_code, category_code, offset, count):
     return format_products(result, None, offset, count)
 
 
-seller_product_detail_sql = seller_product_general_sql + """
-and s.seller_code='{0}' and p.product_code='{1}'
+seller_product_detail_sql = """
+select any_value(p.product_code) as product_code, any_value(sp.name) as sub_product_name, any_value(s.seller_code) as seller_code
+, any_value(s.name) as seller_name, any_value(sp.sub_product_code) as sub_product_code, any_value(p.name) as product_name
+, any_value(c.name) as category_name, any_value(ssp.price) as price, any_value(c.category_code) as category_code
+, any_value(p.img_orig) as product_img_orig, any_value(sp.img_orig) as sub_product_img_orig
+, any_value(p.img_thumb) as product_img_thumb, any_value(sp.img_thumb) as sub_product_img_thumb 
+, group_concat(concat(spd.key,':', spd.value)) as specifications 
+from sellers s inner join seller_sub_product ssp on ssp.seller_id=s.id 
+inner join sub_product sp on sp.id=ssp.sub_product_id inner join product p on p.id=sp.product_id 
+inner join product_category c on c.id=p.product_category_id 
+left join sub_product_detail spd on sp.id=spd.sub_product_id 
+where s.is_active=1 and ssp.is_active=1 
+""" + """
+and s.seller_code='{0}' and p.product_code='{1}' group by sp.id 
 """
 
 

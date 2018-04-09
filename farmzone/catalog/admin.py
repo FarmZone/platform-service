@@ -23,6 +23,16 @@ class ProductDetailInlineAdmin(admin.TabularInline):
     verbose_name_plural = "Product Details"
 
 
+class SubProductDetailInlineAdmin(admin.TabularInline):
+    model = SubProductDetail
+    fieldsets = (
+        (None, {'fields': ('key', 'value')}),
+    )
+    extra = 0
+    verbose_name = "Sub Product Detail"
+    verbose_name_plural = "Sub Product Details"
+
+
 class ProductAdmin(admin.ModelAdmin):
     model = Product
     fieldsets = (
@@ -34,6 +44,19 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [
         SubProductInlineAdmin,
         ProductDetailInlineAdmin
+    ]
+
+
+class SubProductAdmin(admin.ModelAdmin):
+    model = SubProduct
+    fieldsets = (
+        (None, {'fields': ('sub_product_code', 'name', 'display_name', 'description', 'img_orig', 'img_thumb')}),
+    )
+    list_display = ['product', 'sub_product_code', 'name', 'display_name', 'description']
+    readonly_fields = ('sub_product_code',)
+    search_fields = ['name']
+    inlines = [
+        SubProductDetailInlineAdmin
     ]
 
 
@@ -66,4 +89,5 @@ class ProductCategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(SubProduct, SubProductAdmin)
 admin.site.register(ProductCategory, ProductCategoryAdmin)
