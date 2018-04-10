@@ -60,7 +60,9 @@ def format_products(result, product_count_map=None, offset=None, count=None):
 
 
 seller_products_sql = seller_product_general_sql + """
-and (select count(*) from product pi where pi.product_category_id=p.product_category_id and pi.id <= p.id) <= 5
+and (select count(distinct pi.id) from product pi inner join sub_product spi on pi.id=spi.product_id 
+inner join seller_sub_product sspi on spi.id=sspi.sub_product_id inner join sellers si on si.id=sspi.seller_id 
+where pi.product_category_id=p.product_category_id and si.is_active=1 and sspi.is_active=1  and si.id=s.id and pi.id<p.id)<5
 and s.seller_code='{0}'
 """
 
