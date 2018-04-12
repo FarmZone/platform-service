@@ -99,11 +99,11 @@ def get_seller_products_by_category(seller_code, category_code, offset, count):
 
 
 seller_product_detail_sql = """
-select any_value(p.product_code) as product_code, any_value(sp.name) as sub_product_name, any_value(s.seller_code) as seller_code
-, any_value(s.name) as seller_name, any_value(sp.sub_product_code) as sub_product_code, any_value(p.name) as product_name
-, any_value(c.name) as category_name, any_value(ssp.price) as price, any_value(c.category_code) as category_code
-, any_value(p.img_orig) as product_img_orig, any_value(sp.img_orig) as sub_product_img_orig
-, any_value(p.img_thumb) as product_img_thumb, any_value(sp.img_thumb) as sub_product_img_thumb 
+select max(p.product_code) as product_code, max(sp.name) as sub_product_name, max(s.seller_code) as seller_code
+, max(s.name) as seller_name, max(sp.sub_product_code) as sub_product_code, max(p.name) as product_name
+, max(c.name) as category_name, max(ssp.price) as price, max(c.category_code) as category_code
+, max(p.img_orig) as product_img_orig, max(sp.img_orig) as sub_product_img_orig
+, max(p.img_thumb) as product_img_thumb, max(sp.img_thumb) as sub_product_img_thumb 
 , group_concat(concat(spd.key,':', spd.value)) as specifications 
 from sellers s inner join seller_sub_product ssp on ssp.seller_id=s.id 
 inner join sub_product sp on sp.id=ssp.sub_product_id inner join product p on p.id=sp.product_id 
