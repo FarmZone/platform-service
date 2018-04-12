@@ -36,8 +36,20 @@ class AppConfigurationAdmin(admin.ModelAdmin):
     search_fields = ['key']
 
 
+class StateCodeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'code', 'is_active']
+    search_fields = ['name']
+
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ['address_line1', 'address_line2', 'address_line3', 'state']
+    search_fields = ['address_line1']
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(UserRoles, UserRolesAdmin)
 admin.site.register(PhoneNumber, PhoneNumberAdmin)
 admin.site.register(AppConfiguration, AppConfigurationAdmin)
 admin.site.unregister(Group)
+admin.site.register(StateCode, StateCodeAdmin)
+admin.site.register(Address, AddressAdmin)

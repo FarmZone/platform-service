@@ -196,3 +196,29 @@ def get_app_configurations():
     for config in configurations:
         config_dict[config.key] = config.value
     return config_dict
+
+
+class StateCode(TimestampedModel):
+    name = models.CharField(max_length=30)
+    code = models.CharField(max_length=15, unique=True)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'state_codes'
+
+    def __str__(self):
+        return self.name
+
+
+class Address(TimestampedModel):
+    address_line1 = models.CharField(max_length=100, blank=True, null=True)
+    address_line2 = models.CharField(max_length=100, blank=True, null=True)
+    address_line3 = models.CharField(max_length=100, blank=True, null=True)
+    state = models.ForeignKey(StateCode)
+    user = models.ForeignKey(User)
+
+    class Meta:
+        db_table = 'address'
+
+    def __str__(self):
+        return "{0}# {1}".format(self.user, self.state)
