@@ -14,5 +14,15 @@ def get_seller_queries_without_status(seller_code, query_status):
             .exclude(status=query_status)
 
 
-def get_seller_queries_serializer():
+def get_support_queries_serializer():
     return SupportSerializer
+
+
+def get_buyer_queries_with_status(user_id, query_status):
+    return Support.objects.select_related('support_category').filter(user_id=user_id) \
+            .filter(status=query_status)
+
+
+def get_buyer_queries_without_status(user_id, query_status):
+    return Support.objects.select_related('support_category').filter(user_id=user_id)\
+            .exclude(status=query_status)

@@ -1,13 +1,13 @@
 from .base import BaseModelViewSet
 from farmzone.qms.query import get_seller_queries_without_status, get_seller_queries_with_status\
-    , get_seller_queries_serializer
+    , get_support_queries_serializer
 from farmzone.support.models import Support, SupportStatus
 import logging
 logger = logging.getLogger(__name__)
 
 
 class SellerPendingQueriesViewSet(BaseModelViewSet):
-    serializer_class = get_seller_queries_serializer()
+    serializer_class = get_support_queries_serializer()
 
     def get_queryset(self):
         seller_code = self.kwargs.get('seller_code')
@@ -15,7 +15,7 @@ class SellerPendingQueriesViewSet(BaseModelViewSet):
 
 
 class SellerResolvedQueriesViewSet(BaseModelViewSet):
-    serializer_class = get_seller_queries_serializer()
+    serializer_class = get_support_queries_serializer()
 
     def get_queryset(self):
         seller_code = self.kwargs.get('seller_code')

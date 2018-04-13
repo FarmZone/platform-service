@@ -74,6 +74,10 @@ def get_seller_products_summary(seller_code):
     return format_products(result, product_count_map)
 
 
+def get_buyer_products_summary(seller_code):
+    return get_seller_products_summary(seller_code)
+
+
 def get_product_count(seller_code):
     product_counts = SellerSubProduct.objects.filter(is_active=True, seller__is_active=True,
                                                     seller__seller_code=seller_code) \
@@ -98,6 +102,10 @@ def get_seller_products_by_category(seller_code, category_code, offset, count):
     return format_products(result, None, offset, count)
 
 
+def get_buyer_products_by_category(seller_code, category_code, offset, count):
+    return get_seller_products_by_category(seller_code, category_code, offset, count)
+
+
 seller_product_detail_sql = """
 select max(p.product_code) as product_code, max(sp.name) as sub_product_name, max(s.seller_code) as seller_code
 , max(s.name) as seller_name, max(sp.sub_product_code) as sub_product_code, max(p.name) as product_name
@@ -119,6 +127,10 @@ def get_seller_product_detail(seller_code, product_code):
     result = execute_query(seller_product_detail_sql.format(seller_code, product_code))
     logger.debug("seller {0}, product_code {1} product_detail {2}".format(seller_code, product_code, result))
     return format_products(result)
+
+
+def get_buyer_product_detail(seller_code, product_code):
+    return get_seller_product_detail(seller_code, product_code)
 
 
 cart_detail_sql = seller_product_general_sql + """

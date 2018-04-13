@@ -84,3 +84,45 @@ order by od.created_at desc
 def get_seller_completed_orders(seller_code, offset, count):
     result = execute_query(seller_completed_orders_sql.format(seller_code))
     return format_orders(result, None, offset, count)
+
+
+buyer_upcoming_orders_sql = seller_order_general_sql + """
+and o.user_id='{0}' and od.status!='COMPLETED' 
+order by od.created_at desc
+"""
+
+
+def get_buyer_upcoming_orders(user_id, offset, count):
+    result = execute_query(buyer_upcoming_orders_sql.format(user_id))
+    return format_orders(result, None, offset, count)
+
+
+buyer_completed_orders_sql = seller_order_general_sql + """
+and o.user_id='{0}' and od.status='COMPLETED' 
+order by od.created_at desc
+"""
+
+
+def get_buyer_completed_orders(user_id, offset, count):
+    result = execute_query(buyer_completed_orders_sql.format(user_id))
+    return format_orders(result, None, offset, count)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
