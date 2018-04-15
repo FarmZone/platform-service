@@ -6,16 +6,21 @@ from collections import OrderedDict
 import logging
 logger = logging.getLogger(__name__)
 
-seller_product_general_sql = """
-select p.product_code, sp.name as sub_product_name, s.seller_code, s.name as seller_name
-, sp.sub_product_code, p.name as product_name, c.name as category_name, ssp.price , c.category_code as category_code
-, p.img_orig as product_img_orig, sp.img_orig as sub_product_img_orig
-, p.img_thumb as product_img_thumb, sp.img_thumb as sub_product_img_thumb, null as specifications 
+seller_product_general_select_sql = """
+select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p.img_thumb as product_img_thumb
+, sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
+, s.seller_code, s.name as seller_name
+, c.name as category_name, c.category_code as category_code
+, ssp.price, ssp.id as seller_sub_product_id 
+, null as specifications 
 from sellers s inner join seller_sub_product ssp on ssp.seller_id=s.id 
 inner join sub_product sp on sp.id=ssp.sub_product_id inner join product p on p.id=sp.product_id 
 inner join product_category c on c.id=p.product_category_id 
-where s.is_active=1 and ssp.is_active=1 
 """
+
+
+seller_product_general_where_sql = """  where s.is_active=1 and ssp.is_active=1 """
+seller_product_general_sql = seller_product_general_select_sql + seller_product_general_where_sql
 
 
 def format_products(result, product_count_map=None, offset=None, count=None):
@@ -41,6 +46,7 @@ def format_products(result, product_count_map=None, offset=None, count=None):
         sub_product_map["seller_code"] = item.seller_code
         sub_product_map["seller_name"] = item.seller_name
         sub_product_map["price"] = item.price
+        sub_product_map["seller_sub_product_id"] = item.seller_sub_product_id
         sub_product_map["sub_product_code"] = item.sub_product_code
         sub_product_map["sub_product_name"] = item.sub_product_name
         sub_product_map["img_orig"] = generate_public_s3_access_url(item.sub_product_img_orig)
@@ -107,11 +113,11 @@ def get_buyer_products_by_category(seller_code, category_code, offset, count):
 
 
 seller_product_detail_sql = """
-select max(p.product_code) as product_code, max(sp.name) as sub_product_name, max(s.seller_code) as seller_code
-, max(s.name) as seller_name, max(sp.sub_product_code) as sub_product_code, max(p.name) as product_name
-, max(c.name) as category_name, max(ssp.price) as price, max(c.category_code) as category_code
-, max(p.img_orig) as product_img_orig, max(sp.img_orig) as sub_product_img_orig
-, max(p.img_thumb) as product_img_thumb, max(sp.img_thumb) as sub_product_img_thumb 
+select max(p.product_code) as product_code, max(p.name) as product_name, max(p.img_orig) as product_img_orig, max(p.img_thumb) as product_img_thumb
+, max(sp.name) as sub_product_name, max(sp.sub_product_code) as sub_product_code, max(sp.img_orig) as sub_product_img_orig, max(sp.img_thumb) as sub_product_img_thumb
+, max(s.seller_code) as seller_code, max(s.name) as seller_name
+, max(c.name) as category_name, max(c.category_code) as category_code
+, max(ssp.price) as price, max(ssp.id) as seller_sub_product_id 
 , group_concat(concat(spd.key,':', spd.value)) as specifications 
 from sellers s inner join seller_sub_product ssp on ssp.seller_id=s.id 
 inner join sub_product sp on sp.id=ssp.sub_product_id inner join product p on p.id=sp.product_id 
@@ -131,14 +137,3 @@ def get_seller_product_detail(seller_code, product_code):
 
 def get_buyer_product_detail(seller_code, product_code):
     return get_seller_product_detail(seller_code, product_code)
-
-
-cart_detail_sql = seller_product_general_sql + """
-and ssp.id in ({0})
-"""
-
-
-def get_cart_product_detail(seller_subproduct_ids):
-    result = execute_query(cart_detail_sql.format(seller_subproduct_ids))
-    logger.debug("seller_subproduct_ids {0} & Cart detail {1}".format(seller_subproduct_ids, result))
-    return format_products(result)

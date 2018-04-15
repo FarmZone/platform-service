@@ -6,19 +6,20 @@ from farmzone.util_config import ModelEnum
 logger = logging.getLogger(__name__)
 
 
-class Cart(TimestampedModel):
-    user = models.ForeignKey(User)
-    seller_sub_product = models.ForeignKey(SellerSubProduct)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    discount = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
-
-    class Meta:
-        db_table = "cart"
-        verbose_name = "Cart"
-        verbose_name_plural = "Cart"
-
-    def __str__(self):
-        return "{0}# {1}#".format(self.user_id, self.seller_sub_product)
+# class Cart(TimestampedModel):
+#     user = models.ForeignKey(User)
+#     seller_sub_product = models.ForeignKey(SellerSubProduct)
+#     price = models.DecimalField(max_digits=8, decimal_places=2)
+#     discount = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+#     qty = models.IntegerField(default=0)
+#
+#     class Meta:
+#         db_table = "cart"
+#         verbose_name = "Cart"
+#         verbose_name_plural = "Cart"
+#
+#     def __str__(self):
+#         return "{0}# {1}#".format(self.user_id, self.seller_sub_product)
 
 
 class Orders(TimestampedModel):
@@ -39,6 +40,7 @@ class OrderStatus(ModelEnum):
     ACCEPTED = "Accepted"
     REJECTED = "Rejected"
     COMPLETED = "COMPLETED"
+    CART = "CART"
 
 
 class OrderDetail(TimestampedModel):

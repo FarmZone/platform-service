@@ -1,17 +1,21 @@
-from farmzone.order.models import OrderDetail, Orders
+from farmzone.order.models import OrderDetail, OrderStatus, Orders
+from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 from collections import OrderedDict
 from farmzone.util_config.db import execute_query
 from farmzone.util_config import generate_public_s3_access_url, utc_standard_format_to_preferred_tz_timestp
+from django.db import transaction
+from django.db.models import Sum, F, DecimalField
 import logging
+import decimal
 logger = logging.getLogger(__name__)
 
 
 seller_order_general_sql = """
-select p.product_code, sp.name as sub_product_name, s.seller_code, s.name as seller_name
-, sp.sub_product_code, p.name as product_name, c.name as category_name , c.category_code as category_code
-, p.img_orig as product_img_orig, sp.img_orig as sub_product_img_orig
-, p.img_thumb as product_img_thumb, sp.img_thumb as sub_product_img_thumb
-, o.total_price, od.price, od.discount, od.status, od.qty, o.id, o.created_at 
+select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p.img_thumb as product_img_thumb
+, sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
+, s.seller_code, s.name as seller_name
+, c.name as category_name , c.category_code as category_code
+, o.total_price, od.price, od.discount, od.status, od.qty, o.id, o.created_at, od.id as order_detail_id  
 , u.full_name, u.email, ph.phone_number 
 , a.address_line1, a.address_line2, a.address_line3, sc.name as state
 from orders o inner join order_detail od on o.id=od.order_id 
@@ -57,6 +61,7 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
         sub_product_map["discount"] = item.discount
         sub_product_map["status"] = item.status
         sub_product_map["qty"] = item.qty
+        sub_product_map["order_detail_id"] = item.order_detail_id
         products.append(sub_product_map)
     orders = []
     for key in order_map:
@@ -65,7 +70,7 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
 
 
 seller_upcoming_orders_sql = seller_order_general_sql + """
-and s.seller_code='{0}' and od.status!='COMPLETED' 
+and s.seller_code='{0}' and od.status not in ('COMPLETED', 'CART') 
 order by od.created_at desc
 """
 
@@ -87,7 +92,7 @@ def get_seller_completed_orders(seller_code, offset, count):
 
 
 buyer_upcoming_orders_sql = seller_order_general_sql + """
-and o.user_id='{0}' and od.status!='COMPLETED' 
+and o.user_id='{0}' and od.status not in ('COMPLETED', 'CART')
 order by od.created_at desc
 """
 
@@ -108,21 +113,63 @@ def get_buyer_completed_orders(user_id, offset, count):
     return format_orders(result, None, offset, count)
 
 
+cart_detail_sql = """
+select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p.img_thumb as product_img_thumb
+, sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
+, s.seller_code, s.name as seller_name
+, c.name as category_name , c.category_code as category_code
+, o.total_price, ssp.price, ssp.discount, od.status, od.qty, o.id, o.created_at, od.id as order_detail_id  
+, u.full_name, u.email, ph.phone_number 
+, a.address_line1, a.address_line2, a.address_line3, sc.name as state
+from orders o inner join order_detail od on o.id=od.order_id 
+inner join seller_sub_product ssp on ssp.id=od.seller_sub_product_id 
+inner join sub_product sp on sp.id=ssp.sub_product_id inner join product p on p.id=sp.product_id 
+inner join product_category c on c.id=p.product_category_id 
+inner join sellers s on ssp.seller_id=s.id
+inner join users u on o.user_id=u.id
+left join address a on u.id=a.user_id
+left join state_codes sc on sc.id=a.state_id
+inner join phone_numbers ph on ph.user_id=u.id
+where s.is_active=1 and ssp.is_active=1 and o.user_id='{0}' and od.status='CART' 
+"""
 
 
+def get_cart_product_detail(user_id):
+    result = execute_query(cart_detail_sql.format(user_id))
+    total_price = get_total_price(result)
+    logger.debug("seller_subproduct_ids {0} & Cart detail {1} & total {2}".format(user_id, result, total_price))
+    orders = format_orders(result)
+    if orders:
+        orders[0]["total_price"] = total_price
+    return orders
 
 
+def get_total_price(result):
+    total_price = decimal.Decimal(0.0)
+    for item in result:
+        price = item.price
+        discount = item.discount
+        qty = item.qty
+        logger.info("p={0}, d={1}, q={2}, t{3}".format(type(price),type(discount), type(qty), type(total_price)))
+        if price and qty:
+            total_price = total_price + ((price - (discount if discount else decimal.Decimal(0.0))) * qty)
+            logger.info("t={0}".format(total_price))
+    return total_price
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+def place_order(user_id, id):
+    item_count = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value).count()
+    if item_count == 0:
+        raise CustomAPI400Exception({
+            "details": "Given id is not a valid cart id for this user or item in cart is zero",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    total_price = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
+        .aggregate(total_price=Sum((F('price')-F('discount'))*F('qty'), output_field=DecimalField()))
+    logger.info("total {0}".format(total_price))
+    with transaction.atomic():
+        OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
+            .update(status=OrderStatus.NEW.value)
+        if total_price and total_price["total_price"]:
+            Orders.objects.filter(id=id, user_id=user_id)\
+                .update(total_price=total_price["total_price"])
