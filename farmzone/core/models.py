@@ -244,7 +244,7 @@ class Address(TimestampedModel):
 class UserAppInfo(TimestampedModel):
     user = models.ForeignKey(User)
     source = models.CharField(max_length=16)
-    version = models.CharField(max_length=10)
+    version = models.CharField(max_length=20, null=True, blank=True)
     other = JSONField(null=True, blank=True)
 
     def __str__(self):
