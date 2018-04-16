@@ -1,4 +1,4 @@
-from farmzone.order.models import OrderDetail, OrderStatus, Orders
+from farmzone.order.models import OrderDetail, OrderStatus, Orders, ORDER_CANCELLED_STATUS
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 from collections import OrderedDict
 from farmzone.util_config.db import execute_query
@@ -35,10 +35,9 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
     order_map = OrderedDict()
     for item in result:
         if item.id not in order_map:
-            order_map[item.id] = {"products": []}
+            order_map[item.id] = {"products": [], "total_price": decimal.Decimal(0.0)}
         order = order_map[item.id]
         order["id"] = item.id
-        order["total_price"] = item.total_price
         order["created_at"] = utc_standard_format_to_preferred_tz_timestp(item.created_at)
         order["user"] = {"full_name": item.full_name, "email": item.email, "phone_number": item.phone_number,
                          "address": {"address_line1":item.address_line1, "address_line2":item.address_line2
@@ -61,7 +60,13 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
         sub_product_map["discount"] = item.discount
         sub_product_map["status"] = item.status
         sub_product_map["qty"] = item.qty
+        logger.debug("order {0} before total {1}".format(order["id"], order["total_price"]))
+        if item.price is not None and item.qty is not None:
+            cal_price = ((item.price - (item.discount if item.discount else decimal.Decimal(0.0))) * item.qty)
+            order["total_price"] = order["total_price"] + cal_price
+            logger.debug("order {0} calculated price {1}".format(order["id"], cal_price))
         sub_product_map["order_detail_id"] = item.order_detail_id
+        logger.debug("order {0} after total {1}".format(order["id"], order["total_price"]))
         products.append(sub_product_map)
     orders = []
     for key in order_map:
@@ -70,7 +75,7 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
 
 
 seller_upcoming_orders_sql = seller_order_general_sql + """
-and s.seller_code='{0}' and od.status not in ('COMPLETED', 'CART') 
+and s.seller_code='{0}' and od.status not in ('COMPLETED', 'CART', 'CANCELLED') 
 order by od.created_at desc
 """
 
@@ -92,7 +97,7 @@ def get_seller_completed_orders(seller_code, offset, count):
 
 
 buyer_upcoming_orders_sql = seller_order_general_sql + """
-and o.user_id='{0}' and od.status not in ('COMPLETED', 'CART')
+and o.user_id='{0}' and od.status not in ('COMPLETED', 'CART', 'CANCELLED')
 order by od.created_at desc
 """
 
@@ -150,10 +155,10 @@ def get_total_price(result):
         price = item.price
         discount = item.discount
         qty = item.qty
-        logger.info("p={0}, d={1}, q={2}, t{3}".format(type(price),type(discount), type(qty), type(total_price)))
+        logger.debug("p={0}, d={1}, q={2}, t{3}".format(type(price),type(discount), type(qty), type(total_price)))
         if price and qty:
             total_price = total_price + ((price - (discount if discount else decimal.Decimal(0.0))) * qty)
-            logger.info("t={0}".format(total_price))
+            logger.debug("t={0}".format(total_price))
     return total_price
 
 
@@ -166,10 +171,22 @@ def place_order(user_id, id):
         })
     total_price = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
         .aggregate(total_price=Sum((F('price')-F('discount'))*F('qty'), output_field=DecimalField()))
-    logger.info("total {0}".format(total_price))
+    logger.debug("total {0}".format(total_price))
     with transaction.atomic():
         OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
             .update(status=OrderStatus.NEW.value)
         if total_price and total_price["total_price"]:
             Orders.objects.filter(id=id, user_id=user_id)\
                 .update(total_price=total_price["total_price"])
+
+
+def cancel_order(user_id, id):
+    item_count = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status__in=ORDER_CANCELLED_STATUS).count()
+    if item_count == 0:
+        raise CustomAPI400Exception({
+            "details": "Given id is not a valid order id for this user or item in order is zero",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    with transaction.atomic():
+        OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status__in=ORDER_CANCELLED_STATUS)\
+            .update(status=OrderStatus.CANCELLED.value)

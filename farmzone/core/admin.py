@@ -46,6 +46,11 @@ class AddressAdmin(admin.ModelAdmin):
     search_fields = ['address_line1']
 
 
+class UserAppInfoAdmin(admin.ModelAdmin):
+    list_display = ['user', 'source', 'version', 'other']
+    search_fields = ['user']
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(UserRoles, UserRolesAdmin)
 admin.site.register(PhoneNumber, PhoneNumberAdmin)
@@ -53,3 +58,4 @@ admin.site.register(AppConfiguration, AppConfigurationAdmin)
 admin.site.unregister(Group)
 admin.site.register(StateCode, StateCodeAdmin)
 admin.site.register(Address, AddressAdmin)
+admin.site.register(UserAppInfo, UserAppInfoAdmin)

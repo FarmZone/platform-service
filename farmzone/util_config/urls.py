@@ -24,9 +24,11 @@ urlpatterns = [
     url(r'^', admin.site.urls),
     url(r'^accounts/login/$', auth_views.login, name='login'),
     url(r'^swagger/$', schema_view),
+    url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_authentication_urls)),
+    url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_seller_urls)),
+    url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_buyer_urls)),
     url(r'^api/v1/', include(v1_authentication_urls)),
     url(r'^api/v1/', include(v1_seller_urls)),
-    url(r'^api/v1/', include(v1_buyer_urls)),
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

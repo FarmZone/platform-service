@@ -36,11 +36,18 @@ class Orders(TimestampedModel):
 
 
 class OrderStatus(ModelEnum):
-    NEW = "New"
-    ACCEPTED = "Accepted"
-    REJECTED = "Rejected"
+    NEW = "NEW"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
     COMPLETED = "COMPLETED"
     CART = "CART"
+    CANCELLED = "CANCELLED"
+
+
+ORDER_CANCELLED_STATUS = [
+    OrderStatus.NEW.value,
+    OrderStatus.ACCEPTED.value
+]
 
 
 class OrderDetail(TimestampedModel):

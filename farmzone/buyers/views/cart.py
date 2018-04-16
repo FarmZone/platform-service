@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class CartDetailView(BaseAPIView):
 
-    def get(self, request, user_id=None):
+    def get(self, request, user_id=None, app_version=None):
         logger.info("Processing Request to fetch cart for user {0} & buyer {1}".format(request.user.id, user_id))
         cart = get_cart_detail(user_id)
         return Response({"cart": cart})
@@ -16,7 +16,7 @@ class CartDetailView(BaseAPIView):
 
 class AddToCartView(BaseAPIView):
 
-    def post(self, request, user_id=None):
+    def post(self, request, user_id=None, app_version=None):
         data = request.data
         seller_sub_product_id = data.get('seller_sub_product_id')
         qty = data.get('qty')

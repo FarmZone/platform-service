@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class SellerProductsSummaryView(BaseAPIView):
 
-    def get(self, request, seller_code=None):
+    def get(self, request, seller_code=None, app_version=None):
         logger.info("Processing Request to fetch products for user {0} & seller {1}".format(request.user.id, seller_code))
         categories = get_seller_products_summary(seller_code)
         return Response({"categories": categories})
@@ -16,7 +16,7 @@ class SellerProductsSummaryView(BaseAPIView):
 
 class SellerProductsByCategoryView(BaseAPIView):
 
-    def get(self, request, seller_code=None, category_code=None):
+    def get(self, request, seller_code=None, category_code=None, app_version=None):
         logger.info("Processing request to fetch product for user {0} with category code {1} and seller code {2}"
                     .format(self.request.user.id, category_code, seller_code))
 
@@ -33,7 +33,7 @@ class SellerProductsByCategoryView(BaseAPIView):
 
 class SellerProductDetailView(BaseAPIView):
 
-    def get(self, request, seller_code=None, product_code=None):
+    def get(self, request, seller_code=None, product_code=None, app_version=None):
         logger.info("Processing request to fetch product detail for user {0} with product code {1} and seller code {2}"
                     .format(self.request.user.id, product_code, seller_code))
         product_detail = get_seller_product_detail(seller_code, product_code)

@@ -2,14 +2,14 @@ from .base import BaseAPIView
 import logging
 from rest_framework.views import Response, status
 from farmzone.settings.common import PAGINATION_DEFAULT_PER_PAGE_RECORD_COUNT
-from farmzone.oms.order import get_buyer_completed_orders, get_buyer_upcoming_orders, place_order
+from farmzone.oms.order import get_buyer_completed_orders, get_buyer_upcoming_orders, place_order, cancel_order
 
 logger = logging.getLogger(__name__)
 
 
 class BuyerUpcomingOrdersView(BaseAPIView):
 
-    def get(self, request, user_id=None):
+    def get(self, request, user_id=None, app_version=None):
         logger.info("Processing request to fetch upcoming orders for user {0} user_id {1}"
                     .format(self.request.user.id, user_id))
 
@@ -26,7 +26,7 @@ class BuyerUpcomingOrdersView(BaseAPIView):
 
 class BuyerCompletedOrdersView(BaseAPIView):
 
-    def get(self, request, user_id=None):
+    def get(self, request, user_id=None, app_version=None):
         logger.info("Processing request to fetch completed orders for user {0} user_id {1}"
                     .format(self.request.user.id, user_id))
 
@@ -42,7 +42,7 @@ class BuyerCompletedOrdersView(BaseAPIView):
 
 
 class PlaceOrder(BaseAPIView):
-    def post(self, request, user_id=None):
+    def post(self, request, user_id=None, app_version=None):
         data = request.data
         cart_id = data.get('id')
 
@@ -54,5 +54,22 @@ class PlaceOrder(BaseAPIView):
         logger.info("Processing Request to place order for user {0} & buyer {1}".format(request.user.id, user_id))
         place_order(user_id, cart_id)
         return Response({"details": "Order placed successfully",
+                             "status_code": "SUCCESS"},
+                            status.HTTP_200_OK)
+
+
+class CancelOrder(BaseAPIView):
+    def post(self, request, user_id=None, app_version=None):
+        data = request.data
+        order_id = data.get('id')
+
+        if not order_id:
+            logger.info("Manadatory fields missing. Requested params {0}".format(data))
+            return Response({"details": "Please provide id parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_404_NOT_FOUND)
+        logger.info("Processing Request to cancel order for user {0} & buyer {1}".format(request.user.id, user_id))
+        cancel_order(user_id, order_id)
+        return Response({"details": "Order cancelled successfully",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

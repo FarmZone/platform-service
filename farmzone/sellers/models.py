@@ -71,6 +71,22 @@ class PreferredSeller(TimestampedModel):
     def __str__(self):
         return self.user.full_name
 
+    @classmethod
+    def create_preferred_seller(cls, user, seller_code):
+        preferred_seller = PreferredSeller.objects.filter(user=user).first()
+        if preferred_seller:
+            logger.info("preferred_seller already exist for user {0} ".format(user.id))
+            return
+        if not seller_code:
+            logger.info("seller_code is not available in request for user {0} ".format(user.id))
+            return
+        seller_obj = Seller.objects.filter(seller_code=seller_code).first()
+        if not seller_obj:
+            logger.info("seller_code is not valid in request for user {0} ".format(user.id))
+            return
+        logger.info("Creating new preferred seller entry for user {0} ".format(user.id))
+        PreferredSeller.objects.create(user=user, seller=seller_obj)
+
 
 class SellerSubProduct(TimestampedModel):
     seller = models.ForeignKey(Seller)

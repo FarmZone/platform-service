@@ -1,4 +1,5 @@
 import logging
+from jsonfield import JSONField
 from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from django.conf import settings
@@ -222,3 +223,40 @@ class Address(TimestampedModel):
 
     def __str__(self):
         return "{0}# {1}".format(self.user, self.state)
+
+    @classmethod
+    def create_address(cls, user, state_code):
+        address = Address.objects.filter(user=user).first()
+        if address:
+            logger.info("Address already exist for user {0} ".format(user.id))
+            return
+        if not state_code:
+            logger.info("State code is not available in request for user {0} ".format(user.id))
+            return
+        state_obj = StateCode.objects.filter(code=state_code).first()
+        if not state_obj:
+            logger.info("State code is not valid in request for user {0} ".format(user.id))
+            return
+        logger.info("Creating new address entry for user {0} ".format(user.id))
+        Address.objects.create(user=user, state=state_obj)
+
+
+class UserAppInfo(TimestampedModel):
+    user = models.ForeignKey(User)
+    source = models.CharField(max_length=16)
+    version = models.CharField(max_length=10)
+    other = JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.user.full_name)
+
+    class Meta:
+        db_table = 'user_app_info'
+        verbose_name = "User App Info"
+        verbose_name_plural = "User App Info"
+
+    @classmethod
+    def create_user_app_info(cls, user, app_version, other, seller_code):
+        logger.info("Creating new user_app_info entry for user {0} ".format(user.id))
+        source = "BUYER" if seller_code else "SELLER"
+        UserAppInfo.objects.create(user=user, version=app_version, other=other, source=source)

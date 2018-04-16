@@ -4,7 +4,8 @@ import logging
 from rest_framework import viewsets, mixins
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from farmzone.core.models import User, PhoneType
+from farmzone.core.models import User, Address, UserAppInfo
+from farmzone.sellers.models import PreferredSeller
 from .permissions import IsUserOrReadOnly
 from .serializers import CreateUserSerializer
 from farmzone.core.models import PhoneNumber
@@ -37,7 +38,7 @@ class UserViewSet(mixins.CreateModelMixin,
 
 
 class UserProfileView(APIView):
-    def get(self, request):
+    def get(self, request, app_version=None):
         logger.info("Request to fetch user's profile for user_id: {0}".format(request.user.id))
         res = UserSerializer(request.user).data
         return Response(res)
@@ -67,35 +68,32 @@ class SendOTPView(APIView):
     permission_classes = ()
 
     @classmethod
-    def new_user_onboarding(cls, mobile_number, user_name):
+    def new_user_onboarding(cls, mobile_number, user_name, request, app_version):
         with transaction.atomic():
             logger.info("Creating new user entry")
             user = User.create_user(user_name)
             logger.info("Creating new phone_number entry "
                         "for userID: {0}, mobile_number: {1}".format(user.id, mobile_number))
             PhoneNumber.create_phone_number(user, mobile_number)
-            # farmer = cls._create_farmer(user)
-            # cls._create_or_update_farmer_community(farmer, refered_by)
+            Address.create_address(user, request.data.get('state_code'))
+            PreferredSeller.create_preferred_seller(user, request.data.get('seller_code'))
+            UserAppInfo.create_user_app_info(user, app_version, request.data.get('other'), request.data.get('seller_code'))
 
     @classmethod
-    def existing_user_onboarding(cls, user):
-        pass
-        # if not Farmer.is_record_exists(user):
-        #     cls._create_farmer(user)
-        # farmer = Farmer.objects.get(user=user)
-        # cls._create_or_update_farmer_community(farmer, refered_by)
+    def existing_user_onboarding(cls, user, request, app_version):
+        UserAppInfo.create_user_app_info(user, app_version, request.data.get('other'), request.data.get('seller_code'))
 
-    def execute(self, mobile_number, user_name):
+    def execute(self, mobile_number, user_name, request, app_version):
         try:
             phone_number = PhoneNumber.objects.filter(phone_number=mobile_number).first()
             if not phone_number:
                 logger.info("No record exists for the mobile_number: {0}. "
                             "Starting new user onboarding flow".format(mobile_number))
-                self.new_user_onboarding(mobile_number, user_name)
+                self.new_user_onboarding(mobile_number, user_name, request, app_version)
                 phone_number = PhoneNumber.objects.filter(phone_number=mobile_number).first()
             else:
                 logger.info("Record exists for the mobile number: {0}".format(mobile_number))
-                self.existing_user_onboarding(phone_number.user)
+                self.existing_user_onboarding(phone_number.user, request, app_version)
             return send_otp(phone_number)
         except IntegrityError as e:
             return Response({
@@ -103,7 +101,7 @@ class SendOTPView(APIView):
                 "details": "Exception while registering user"
             }, status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request):
+    def post(self, request, app_version=None):
         mobile_number = request.data.get('mobile_number')
         user_name = request.data.get('user_name')
         if not mobile_number or not user_name:
@@ -113,7 +111,7 @@ class SendOTPView(APIView):
                 "details": "Missing on of the required field"
             }, status.HTTP_400_BAD_REQUEST)
         logger.info("Processing SendOTP request for mobile_number: {0}, username {1}".format(mobile_number, user_name))
-        return self.execute(mobile_number, user_name)
+        return self.execute(mobile_number, user_name, request, app_version)
 
 
 class VerifyOTPView(APIView):
@@ -127,7 +125,7 @@ class VerifyOTPView(APIView):
 
     permission_classes = ()
 
-    def post(self, request):
+    def post(self, request, app_version=None):
         otp = request.data.get('otp')
         mobile_number = request.data.get('mobile_number')
         session_id = request.data.get('session_id')

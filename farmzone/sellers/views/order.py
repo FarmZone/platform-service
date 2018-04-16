@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class SellerUpcomingOrdersView(BaseAPIView):
 
-    def get(self, request, seller_code=None):
+    def get(self, request, seller_code=None, app_version=None):
         logger.info("Processing request to fetch upcoming orders for user {0} seller code {1}"
                     .format(self.request.user.id, seller_code))
 
@@ -25,7 +25,7 @@ class SellerUpcomingOrdersView(BaseAPIView):
 
 class SellerCompletedOrdersView(BaseAPIView):
 
-    def get(self, request, seller_code=None):
+    def get(self, request, seller_code=None, app_version=None):
         logger.info("Processing request to fetch completed orders for user {0} seller code {1}"
                     .format(self.request.user.id, seller_code))
 
