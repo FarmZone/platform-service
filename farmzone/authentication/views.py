@@ -84,6 +84,7 @@ class SendOTPView(APIView):
         user.full_name = user_name
         user.save()
         UserAppInfo.create_user_app_info(user, app_version, request.data.get('other'), request.data.get('seller_code'))
+        PreferredSeller.create_preferred_seller(user, request.data.get('seller_code'))
 
     def execute(self, mobile_number, user_name, request, app_version):
         try:

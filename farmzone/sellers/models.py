@@ -61,6 +61,7 @@ class SellerOwner(TimestampedModel):
 class PreferredSeller(TimestampedModel):
     user = models.ForeignKey(User)
     seller = models.ForeignKey(Seller)
+    is_primary = models.BooleanField(default=False)
 
     class Meta:
         db_table = "preferred_seller"
@@ -73,10 +74,6 @@ class PreferredSeller(TimestampedModel):
 
     @classmethod
     def create_preferred_seller(cls, user, seller_code):
-        preferred_seller = PreferredSeller.objects.filter(user=user).first()
-        if preferred_seller:
-            logger.info("preferred_seller already exist for user {0} ".format(user.id))
-            return
         if not seller_code:
             logger.info("seller_code is not available in request for user {0} ".format(user.id))
             return
@@ -84,8 +81,18 @@ class PreferredSeller(TimestampedModel):
         if not seller_obj:
             logger.info("seller_code is not valid in request for user {0} ".format(user.id))
             return
-        logger.info("Creating new preferred seller entry for user {0} ".format(user.id))
-        PreferredSeller.objects.create(user=user, seller=seller_obj)
+        preferred_seller = PreferredSeller.objects.filter(user=user).first()
+        if not preferred_seller:
+            logger.info("Creating new preferred seller entry for user {0} & seller {1} ".format(user.id, seller_code))
+            PreferredSeller.objects.create(user=user, seller=seller_obj, is_primary=True)
+            return
+        same_preferred_seller = PreferredSeller.objects.filter(user=user, seller=seller_obj).first()
+        if not same_preferred_seller:
+            logger.info("Creating new preferred seller entry for user {0} & seller {1} ".format(user.id, seller_code))
+            PreferredSeller.objects.create(user=user, seller=seller_obj)
+            return
+        else:
+            logger.debug("Seller {0} already associated with user {1}".format(seller_code, user.id))
 
 
 class SellerSubProduct(TimestampedModel):

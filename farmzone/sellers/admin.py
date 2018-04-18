@@ -19,7 +19,7 @@ class SellerOwnerAdmin(admin.ModelAdmin):
 
 class PreferredSellerAdmin(admin.ModelAdmin):
     model = PreferredSeller
-    list_display = ['user', 'seller']
+    list_display = ['user', 'seller', 'is_primary']
 
 
 class SellerSubProductAdmin(admin.ModelAdmin):
