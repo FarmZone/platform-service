@@ -7,6 +7,7 @@ from django.db import transaction
 from django.db.models import Sum, F, DecimalField
 import logging
 import decimal
+import arrow
 logger = logging.getLogger(__name__)
 
 
@@ -15,7 +16,7 @@ select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p
 , sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
 , s.seller_code, s.name as seller_name
 , c.name as category_name , c.category_code as category_code
-, o.total_price, od.price, od.discount, od.status, od.qty, o.id, o.created_at, od.id as order_detail_id  
+, o.total_price, od.price, od.discount, od.status, od.qty, o.id, od.created_at, od.id as order_detail_id  
 , u.full_name, u.email, ph.phone_number 
 , a.address_line1, a.address_line2, a.address_line3, sc.name as state
 from orders o inner join order_detail od on o.id=od.order_id 
@@ -123,7 +124,7 @@ select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p
 , sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
 , s.seller_code, s.name as seller_name
 , c.name as category_name , c.category_code as category_code
-, o.total_price, ssp.price, ssp.discount, od.status, od.qty, o.id, o.created_at, od.id as order_detail_id  
+, o.total_price, ssp.price, ssp.discount, od.status, od.qty, o.id, od.created_at, od.id as order_detail_id  
 , u.full_name, u.email, ph.phone_number 
 , a.address_line1, a.address_line2, a.address_line3, sc.name as state
 from orders o inner join order_detail od on o.id=od.order_id 
@@ -172,12 +173,13 @@ def place_order(user_id, id):
     total_price = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
         .aggregate(total_price=Sum((F('price')-F('discount'))*F('qty'), output_field=DecimalField()))
     logger.debug("total {0}".format(total_price))
+    now = arrow.utcnow().datetime
     with transaction.atomic():
         OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
-            .update(status=OrderStatus.NEW.value)
+            .update(status=OrderStatus.NEW.value, created_at=now, updated_at=now)
         if total_price and total_price["total_price"]:
             Orders.objects.filter(id=id, user_id=user_id)\
-                .update(total_price=total_price["total_price"])
+                .update(total_price=total_price["total_price"], created_at=now, updated_at=now)
 
 
 def cancel_order(user_id, id):
