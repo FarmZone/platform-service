@@ -7,4 +7,5 @@ urlpatterns = [
     url('send-otp/?$', views.SendOTPView.as_view()),
     url('verify-otp/?$', views.VerifyOTPView.as_view()),
     url('user/profile/?$', views.UserProfileView.as_view()),
+    url(r'user/save_address/?$', views.SaveAddressView.as_view()),
 ]

@@ -240,6 +240,22 @@ class Address(TimestampedModel):
         logger.info("Creating new address entry for user {0} ".format(user.id))
         Address.objects.create(user=user, state=state_obj)
 
+    @classmethod
+    def create_update_address(cls, user, state_obj, address_line1, address_line2, address_line3):
+        address = Address.objects.filter(user=user).first()
+        if address:
+            logger.info("Address already exist for user {0} ".format(user.id))
+            address.address_line1 = address_line1
+            address.address_line2 = address_line2
+            address.address_line3 = address_line3
+            if state_obj:
+                address.state = state_obj
+            address.save()
+        else:
+            logger.info("Creating new address entry for user {0} ".format(user.id))
+            Address.objects.create(user=user, state=state_obj, address_line1=address_line1
+                               , address_line2=address_line2, address_line3=address_line3)
+
 
 class UserAppInfo(TimestampedModel):
     user = models.ForeignKey(User)

@@ -4,7 +4,7 @@ import logging
 from rest_framework import viewsets, mixins
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from farmzone.core.models import User, Address, UserAppInfo
+from farmzone.core.models import User, Address, UserAppInfo, StateCode
 from farmzone.sellers.models import PreferredSeller
 from .permissions import IsUserOrReadOnly
 from .serializers import CreateUserSerializer
@@ -80,7 +80,9 @@ class SendOTPView(APIView):
             UserAppInfo.create_user_app_info(user, app_version, request.data.get('other'), request.data.get('seller_code'))
 
     @classmethod
-    def existing_user_onboarding(cls, user, request, app_version):
+    def existing_user_onboarding(cls, user, user_name, request, app_version):
+        user.full_name = user_name
+        user.save()
         UserAppInfo.create_user_app_info(user, app_version, request.data.get('other'), request.data.get('seller_code'))
 
     def execute(self, mobile_number, user_name, request, app_version):
@@ -93,7 +95,7 @@ class SendOTPView(APIView):
                 phone_number = PhoneNumber.objects.filter(phone_number=mobile_number).first()
             else:
                 logger.info("Record exists for the mobile number: {0}".format(mobile_number))
-                self.existing_user_onboarding(phone_number.user, request, app_version)
+                self.existing_user_onboarding(phone_number.user, user_name, request, app_version)
             return send_otp(phone_number)
         except IntegrityError as e:
             return Response({
@@ -153,3 +155,33 @@ class VerifyOTPView(APIView):
                 return Response(OTP_STATUS['verified'], status.HTTP_200_OK)
             return Response(OTP_STATUS['verification_failed'], status.HTTP_400_BAD_REQUEST)
         return Response({'status': 'failed', 'details': 'OTP or session id not provided'}, status.HTTP_400_BAD_REQUEST)
+
+
+class SaveAddressView(APIView):
+    permission_classes = ()
+
+    def post(self, request, app_version=None):
+        address_line1 = request.data.get('address_line1')
+        address_line2 = request.data.get('address_line2')
+        address_line3 = request.data.get('address_line3')
+        state_code = request.data.get('state_code')
+        user = request.user
+        logger.info("state_code {0}, user {1}, address_line1 {2}".format(state_code, user, address_line1))
+        if not state_code or not user:
+            logger.warning("user and state_code is mandatory")
+            return Response({
+                "status_code": "MISSING_REQUIRED_FIELD",
+                "details": "Missing on of the required field user or state_code"
+            }, status.HTTP_400_BAD_REQUEST)
+        state_obj = StateCode.objects.filter(code=state_code).first()
+        if not state_obj:
+            logger.warning("State code does not match any state {0}".format(state_code))
+            return Response({
+                "status_code": "INVALID_REQUIRED_FIELD",
+                "details": "State code does not match any state"
+            }, status.HTTP_400_BAD_REQUEST)
+        Address.create_update_address(user, state_obj, address_line1, address_line2, address_line3)
+        return Response({
+            "status_code": "SUCCESS",
+            "details": "Address saved successfully"
+        }, status.HTTP_200_OK)
