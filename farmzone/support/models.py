@@ -2,6 +2,7 @@ import logging
 from django.db import models
 from farmzone.core.models import TimestampedModel, User
 from farmzone.sellers.models import SellerSubProduct
+from farmzone.order.models import OrderDetail
 from farmzone.util_config import ModelEnum
 from django.db.models.signals import post_save
 logger = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ class SupportStatus(ModelEnum):
 
 class Support(TimestampedModel):
     support_category = models.ForeignKey(SupportCategory)
-    seller_sub_product = models.ForeignKey(SellerSubProduct, blank=True, null=True)
+    order_detail = models.ForeignKey(OrderDetail, blank=True, null=True)
     user = models.ForeignKey(User)
     comment = models.CharField(max_length=500, blank=True, null=True)
     status = models.CharField(choices=SupportStatus.get_values(), max_length=30, default=SupportStatus.NEW.value)
@@ -53,7 +54,7 @@ class Support(TimestampedModel):
         return "{0} #{1}".format(self.support_category.name, self.user.full_name)
 
     @classmethod
-    def add_query(cls, user, seller_sub_product, support_category, status, comment):
+    def add_query(cls, user, order_detail, support_category, status, comment):
         logger.info("Creating new support entry for user {0} ".format(user.id))
         Support.objects.create(user=user, support_category=support_category
-                               , seller_sub_product=seller_sub_product, status=status, comment=comment)
+                               , order_detail=order_detail, status=status, comment=comment)

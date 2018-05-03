@@ -5,9 +5,9 @@ from .models import *
 class SupportAdmin(admin.ModelAdmin):
     model = Support
     fieldsets = (
-        (None, {'fields': ('support_category', 'seller_sub_product', 'user', 'status', 'comment')}),
+        (None, {'fields': ('support_category', 'order_detail', 'user', 'status', 'comment')}),
     )
-    list_display = ['support_category', 'seller_sub_product', 'user', 'status', 'comment']
+    list_display = ['support_category', 'order_detail', 'user', 'status', 'comment']
     search_fields = ['name']
 
 

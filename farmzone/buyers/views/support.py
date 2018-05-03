@@ -3,6 +3,7 @@ from farmzone.qms.query import get_buyer_queries_with_status, get_buyer_queries_
     , get_support_queries_serializer
 from farmzone.support.models import Support, SupportStatus, SupportCategory
 from farmzone.sellers.models import SellerSubProduct
+from farmzone.order.models import OrderDetail
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -31,7 +32,7 @@ class SaveQueryView(BaseAPIView):
     def post(self, request, user_id=None, app_version=None):
         comment = request.data.get('comment')
         support_category_id = request.data.get('support_category_id')
-        seller_sub_product_id = request.data.get('seller_sub_product_id')
+        order_detail_id = request.data.get('order_detail_id')
         support_status = SupportStatus.NEW.value
         user = request.user
         if not support_category_id:
@@ -45,17 +46,17 @@ class SaveQueryView(BaseAPIView):
             return Response({"details": "Please provide valid support_category_id parameter",
                              "status_code": "INVALID_REQUIRED_FIELD"},
                             status.HTTP_400_BAD_REQUEST)
-        seller_sub_product = None
-        if seller_sub_product_id:
-            seller_sub_product = SellerSubProduct.objects.filter(id=seller_sub_product_id).first()
-            if not seller_sub_product:
-                logger.info("seller_sub_product_id does not match any seller_sub_product {0}".format(seller_sub_product_id))
-                return Response({"details": "Please provide valid seller_sub_product_id parameter",
+        order_detail = None
+        if order_detail_id:
+            order_detail = OrderDetail.objects.filter(id=order_detail_id).first()
+            if not order_detail:
+                logger.info("order_detail_id does not match any order_detail {0}".format(order_detail_id))
+                return Response({"details": "Please provide valid order_detail_id parameter",
                                  "status_code": "INVALID_PROVIDED_FIELD"},
                                 status.HTTP_400_BAD_REQUEST)
 
         logger.info("Processing Request to add query for user {0} & buyer {1}".format(request.user.id, user_id))
-        Support.add_query(user, seller_sub_product, support_category, support_status, comment)
+        Support.add_query(user, order_detail, support_category, support_status, comment)
         return Response({"details": "Query added successfully",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

@@ -35,7 +35,7 @@ class AcceptQueryView(BaseAPIView):
             return Response({"details": "Please provide query_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_400_BAD_REQUEST)
-        support = Support.objects.filter(id=query_id, seller_sub_product__seller__seller_code=seller_code).first()
+        support = Support.objects.filter(id=query_id, order_detail__seller_sub_product__seller__seller_code=seller_code).first()
         if not support:
             logger.info("query_id does not match any support query {0}".format(query_id))
             return Response({"details": "Please provide valid query_id parameter",
