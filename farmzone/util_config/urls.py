@@ -10,6 +10,7 @@ from .swagger_customization import get_swagger_view
 from farmzone.authentication import v1_urls as v1_authentication_urls
 from farmzone.sellers import v1_urls as v1_seller_urls
 from farmzone.buyers import v1_urls as v1_buyer_urls
+from farmzone.support import v1_urls as v1_support_urls
 from ajax_select import urls as ajax_select_urls
 
 router = DefaultRouter()
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_authentication_urls)),
     url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_seller_urls)),
     url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_buyer_urls)),
+    url(r'^api/(?P<app_version>(\d*\.\d*\.\d*))/', include(v1_support_urls)),
     url(r'^api/v1/', include(v1_authentication_urls)),
     url(r'^api/v1/', include(v1_seller_urls)),
 ]

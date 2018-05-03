@@ -465,7 +465,7 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 86400}
 ########## END CELERY
 
 # Table Records' Pagination variables
-PAGINATION_DEFAULT_PER_PAGE_RECORD_COUNT = 5
+PAGINATION_DEFAULT_PER_PAGE_RECORD_COUNT = 10
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
