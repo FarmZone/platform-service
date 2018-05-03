@@ -5,7 +5,7 @@ from farmzone.sellers.views.product import SellerProductsSummaryView, SellerProd
     , SellerProductDetailView
 from farmzone.sellers.views.user import SellerPreferredUserViewSet
 from farmzone.sellers.views.order import SellerUpcomingOrdersView, SellerCompletedOrdersView
-from farmzone.sellers.views.support import SellerPendingQueriesViewSet, SellerResolvedQueriesViewSet
+from farmzone.sellers.views.support import SellerPendingQueriesViewSet, SellerResolvedQueriesViewSet, AcceptQueryView
 
 
 urlpatterns = [
@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'seller/(?P<seller_code>[\w]+)/completed_orders/?$', SellerCompletedOrdersView.as_view()),
     url(r'seller/(?P<seller_code>[\w]+)/pending_queries/?$', SellerPendingQueriesViewSet.as_view({'get': 'list'})),
     url(r'seller/(?P<seller_code>[\w]+)/resolved_queries/?$', SellerResolvedQueriesViewSet.as_view({'get': 'list'})),
+    url(r'seller/(?P<seller_code>[\w]+)/accept_query/?$', AcceptQueryView.as_view()),
 ]

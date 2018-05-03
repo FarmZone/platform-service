@@ -59,3 +59,33 @@ class SaveQueryView(BaseAPIView):
         return Response({"details": "Query added successfully",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
+
+
+class ResolveQueryView(BaseAPIView):
+
+    def post(self, request, user_id=None, app_version=None):
+        query_id = request.data.get('query_id')
+        user = request.user
+        if not query_id:
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide query_id parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        support = Support.objects.filter(id=query_id, user=user).first()
+        if not support:
+            logger.info("query_id does not match any support query {0}".format(query_id))
+            return Response({"details": "Please provide valid query_id parameter",
+                             "status_code": "INVALID_REQUIRED_FIELD"},
+                            status.HTTP_400_BAD_REQUEST)
+        if support.status != SupportStatus.ACCEPTED.value:
+            logger.info("Support status is not in accepted state to resolve {0}".format(support.status))
+            return Response({"details": "Query is not in valid state of Accepted",
+                                 "status_code": "INVALID_QUERY_STATE"},
+                                status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Processing Request to resolve query for user {0} & buyer {1}".format(request.user.id, user_id))
+        support.status = SupportStatus.RESOLVED.value
+        support.save()
+        return Response({"details": "Query resolved successfully",
+                             "status_code": "SUCCESS"},
+                            status.HTTP_200_OK)
