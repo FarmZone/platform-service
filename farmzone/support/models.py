@@ -41,7 +41,7 @@ class Support(TimestampedModel):
     support_category = models.ForeignKey(SupportCategory)
     seller_sub_product = models.ForeignKey(SellerSubProduct, blank=True, null=True)
     user = models.ForeignKey(User)
-    comment = models.CharField(max_length=500)
+    comment = models.CharField(max_length=500, blank=True, null=True)
     status = models.CharField(choices=SupportStatus.get_values(), max_length=30, default=SupportStatus.NEW.value)
 
     class Meta:
@@ -51,3 +51,9 @@ class Support(TimestampedModel):
 
     def __str__(self):
         return "{0} #{1}".format(self.support_category.name, self.user.full_name)
+
+    @classmethod
+    def add_query(cls, user, seller_sub_product, support_category, status, comment):
+        logger.info("Creating new support entry for user {0} ".format(user.id))
+        Support.objects.create(user=user, support_category=support_category
+                               , seller_sub_product=seller_sub_product, status=status, comment=comment)
