@@ -16,7 +16,7 @@ select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p
 , sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
 , s.seller_code, s.name as seller_name
 , c.name as category_name , c.category_code as category_code
-, o.total_price, od.price, od.discount, od.status, od.qty, o.id, od.created_at, od.id as order_detail_id  
+, o.total_price, od.price, od.discount, od.status, od.qty, o.id, od.created_at, od.id as order_detail_id, od.seller_sub_product_id  
 , u.full_name, u.email, ph.phone_number 
 , a.address_line1, a.address_line2, a.address_line3, sc.name as state
 from orders o inner join order_detail od on o.id=od.order_id 
@@ -67,6 +67,7 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
             order["total_price"] = order["total_price"] + cal_price
             logger.debug("order {0} calculated price {1}".format(order["id"], cal_price))
         sub_product_map["order_detail_id"] = item.order_detail_id
+        sub_product_map["seller_sub_product_id"] = item.seller_sub_product_id
         logger.debug("order {0} after total {1}".format(order["id"], order["total_price"]))
         products.append(sub_product_map)
     orders = []
@@ -124,7 +125,7 @@ select p.product_code, p.name as product_name, p.img_orig as product_img_orig, p
 , sp.name as sub_product_name, sp.sub_product_code, sp.img_orig as sub_product_img_orig, sp.img_thumb as sub_product_img_thumb
 , s.seller_code, s.name as seller_name
 , c.name as category_name , c.category_code as category_code
-, o.total_price, ssp.price, ssp.discount, od.status, od.qty, o.id, od.created_at, od.id as order_detail_id  
+, o.total_price, ssp.price, ssp.discount, od.status, od.qty, o.id, od.created_at, od.id as order_detail_id, od.seller_sub_product_id 
 , u.full_name, u.email, ph.phone_number 
 , a.address_line1, a.address_line2, a.address_line3, sc.name as state
 from orders o inner join order_detail od on o.id=od.order_id 
