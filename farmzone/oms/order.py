@@ -192,3 +192,15 @@ def cancel_order(user_id, id):
     with transaction.atomic():
         OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status__in=ORDER_CANCELLED_STATUS)\
             .update(status=OrderStatus.CANCELLED.value)
+
+
+def save_order_rating(order_detail_id, rating, user_id):
+    order_detail = OrderDetail.objects.filter(id=order_detail_id, order__user_id=user_id).first()
+    if not order_detail:
+        raise CustomAPI400Exception({
+            "details": "Given id is not a valid order id for this user or item in order is zero",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    with transaction.atomic():
+        order_detail.rating = rating
+        order_detail.save()

@@ -57,6 +57,7 @@ class OrderDetail(TimestampedModel):
     discount = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     qty = models.IntegerField(default=0)
     status = models.CharField(choices=OrderStatus.get_values(), max_length=30, default=OrderStatus.NEW.value)
+    rating = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
 
     class Meta:
         db_table = "order_detail"

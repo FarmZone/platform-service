@@ -54,7 +54,7 @@ class Support(TimestampedModel):
         return "{0} #{1}".format(self.support_category.name, self.user.full_name)
 
     @classmethod
-    def add_query(cls, user, order_detail, support_category, status, comment):
-        logger.info("Creating new support entry for user {0} ".format(user.id))
-        Support.objects.create(user=user, support_category=support_category
+    def add_query(cls, user_id, order_detail, support_category, status, comment):
+        logger.info("Creating new support entry for user {0} ".format(user_id))
+        Support.objects.create(user_id=user_id, support_category=support_category
                                , order_detail=order_detail, status=status, comment=comment)
