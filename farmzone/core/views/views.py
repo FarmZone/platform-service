@@ -9,3 +9,9 @@ class LegalPolicyView(View):
 
     def get(self, request, app_version=None):
         return render(request, "core/legal_policy.html", context={})
+
+
+class AboutUsView(View):
+
+    def get(self, request, app_version=None):
+        return render(request, "core/about_us.html", context={})
