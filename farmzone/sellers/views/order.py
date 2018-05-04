@@ -1,8 +1,9 @@
 from .base import BaseAPIView
-from farmzone.oms.order import get_seller_upcoming_orders, get_seller_completed_orders
+from farmzone.oms.order import get_seller_upcoming_orders, get_seller_completed_orders, accept_order, dispatch_order
 import logging
 from rest_framework.response import Response
 from farmzone.settings.common import PAGINATION_DEFAULT_PER_PAGE_RECORD_COUNT
+from rest_framework import status
 logger = logging.getLogger(__name__)
 
 
@@ -38,3 +39,33 @@ class SellerCompletedOrdersView(BaseAPIView):
 
         orders = get_seller_completed_orders(seller_code, offset, count)
         return Response({"orders": orders})
+
+
+class AcceptOrderView(BaseAPIView):
+
+    def post(self, request, seller_code=None, app_version=None):
+        order_detail_id = request.data.get('order_detail_id')
+        if not order_detail_id:
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide order_detail_id parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        accept_order(order_detail_id, seller_code)
+        return Response({"details": "Order accepted successfully",
+                             "status_code": "SUCCESS"},
+                            status.HTTP_200_OK)
+
+
+class DispatchOrderView(BaseAPIView):
+
+    def post(self, request, seller_code=None, app_version=None):
+        order_detail_id = request.data.get('order_detail_id')
+        if not order_detail_id:
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide order_detail_id parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        dispatch_order(order_detail_id, seller_code)
+        return Response({"details": "Order dispatched successfully",
+                             "status_code": "SUCCESS"},
+                            status.HTTP_200_OK)

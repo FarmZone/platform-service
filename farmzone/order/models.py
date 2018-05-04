@@ -40,6 +40,7 @@ class OrderStatus(ModelEnum):
     ACCEPTED = "ACCEPTED"
     REJECTED = "REJECTED"
     COMPLETED = "COMPLETED"
+    DISPATCHED = "DISPATCHED"
     CART = "CART"
     CANCELLED = "CANCELLED"
 

@@ -1,7 +1,8 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.conf.urls import url
-from farmzone.buyers.views.order import BuyerUpcomingOrdersView, BuyerCompletedOrdersView, PlaceOrder, CancelOrder, SaveOrderRatingView
+from farmzone.buyers.views.order import BuyerUpcomingOrdersView, BuyerCompletedOrdersView, PlaceOrder, CancelOrder\
+    , SaveOrderRatingView, CompleteOrderView
 from farmzone.buyers.views.product import BuyerProductsByCategoryView, BuyerProductsSummaryView, BuyerProductDetailView
 from farmzone.buyers.views.support import BuyerPendingQueriesViewSet, BuyerResolvedQueriesViewSet, SaveQueryView, ResolveQueryView
 from farmzone.buyers.views.cart import CartDetailView, AddToCartView
@@ -21,4 +22,5 @@ urlpatterns = [
     url(r'buyer/(?P<user_id>[\w]+)/save_query/?$', SaveQueryView.as_view()),
     url(r'buyer/(?P<user_id>[\w]+)/resolve_query/?$', ResolveQueryView.as_view()),
     url(r'buyer/(?P<user_id>[\w]+)/save_order_rating/?$', SaveOrderRatingView.as_view()),
+    url(r'buyer/(?P<user_id>[\w]+)/complete_order/?$', CompleteOrderView.as_view()),
 ]

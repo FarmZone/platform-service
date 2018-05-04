@@ -205,3 +205,63 @@ def save_order_rating(order_detail_id, rating, user_id):
     with transaction.atomic():
         order_detail.rating = rating
         order_detail.save()
+
+
+def accept_order(order_detail_id, seller_code):
+    order_detail = OrderDetail.objects.filter(id=order_detail_id, seller_sub_product__seller__seller_code=seller_code).first()
+    if not order_detail:
+        logger.info("order_detail_id does not match any order detail {0} for given seller {1}".format(order_detail_id, seller_code))
+        raise CustomAPI400Exception({
+            "details": "Given order_detail_id is not a valid id for this seller",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    if order_detail.status != OrderStatus.NEW.value:
+        logger.info("Order status is not in New state to accept {0}".format(order_detail.status))
+        raise CustomAPI400Exception({
+            "details": "Order Detail is not in valid state of New",
+            "status_code": "INVALID_ORDER_DETAIL_STATE"
+        })
+    logger.info("Processing Request to accept order detail for seller {0}".format(seller_code))
+    with transaction.atomic():
+        order_detail.status = OrderStatus.ACCEPTED.value
+        order_detail.save()
+
+
+def dispatch_order(order_detail_id, seller_code):
+    order_detail = OrderDetail.objects.filter(id=order_detail_id, seller_sub_product__seller__seller_code=seller_code).first()
+    if not order_detail:
+        logger.info("order_detail_id does not match any order detail {0} for given seller {1}".format(order_detail_id, seller_code))
+        raise CustomAPI400Exception({
+            "details": "Given order_detail_id is not a valid id for this seller",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    if order_detail.status != OrderStatus.ACCEPTED.value:
+        logger.info("Order status is not in Accept state to dispatch {0}".format(order_detail.status))
+        raise CustomAPI400Exception({
+            "details": "Order Detail is not in valid state of Accept",
+            "status_code": "INVALID_ORDER_DETAIL_STATE"
+        })
+    logger.info("Processing Request to dispatch order detail for seller {0}".format(seller_code))
+    with transaction.atomic():
+        order_detail.status = OrderStatus.DISPATCHED.value
+        order_detail.save()
+
+
+def complete_order(order_detail_id, user_id):
+    order_detail = OrderDetail.objects.filter(id=order_detail_id, order__user_id=user_id).first()
+    if not order_detail:
+        logger.info("order_detail_id does not match any order detail {0} for given user {1}".format(order_detail_id, user_id))
+        raise CustomAPI400Exception({
+            "details": "Given order_detail_id is not a valid id for this user",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    if order_detail.status != OrderStatus.DISPATCHED.value:
+        logger.info("Order status is not in dispatched state to complete {0}".format(order_detail.status))
+        raise CustomAPI400Exception({
+            "details": "Order Detail is not in valid state of Dispatched",
+            "status_code": "INVALID_ORDER_DETAIL_STATE"
+        })
+    logger.info("Processing Request to complete order for user {0}".format(user_id))
+    with transaction.atomic():
+        order_detail.status = OrderStatus.COMPLETED.value
+        order_detail.save()
