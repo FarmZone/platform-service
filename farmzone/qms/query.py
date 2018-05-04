@@ -2,6 +2,8 @@ from farmzone.support.models import Support, SupportStatus, SupportCategory
 from farmzone.support.serializers import SupportSerializer
 from farmzone.order.models import OrderDetail
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
+from farmzone.util_config.tasks import send_sms_to_user_id
+from farmzone.notification.keys import query as keys
 from django.db import transaction
 import logging
 logger = logging.getLogger(__name__)
@@ -92,3 +94,4 @@ def save_query(support_category_id, order_detail_id, user_id, support_status, co
     logger.info("Processing Request to add query for user {0}".format(user_id))
     with transaction.atomic():
         Support.add_query(user_id, order_detail, support_category, support_status, comment)
+    send_sms_to_user_id(user_id, keys.buyer_save_query_buyer_key, order_detail_id=order_detail_id)

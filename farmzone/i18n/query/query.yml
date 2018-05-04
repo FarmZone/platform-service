@@ -1,0 +1,3 @@
+en:
+  buyer_save_query_buyer_sms: "This is a test message being sent using Exotel with a (buyer) and (123). If this is being abused, report to 08088919888"
+  buyer_save_query_seller_sms: "This is a test message being sent using Exotel with a (seller) and (456). If this is being abused, report to 08088919888"
