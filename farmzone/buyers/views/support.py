@@ -31,13 +31,21 @@ class SaveQueryView(BaseAPIView):
         comment = request.data.get('comment')
         support_category_id = request.data.get('support_category_id')
         order_detail_id = request.data.get('order_detail_id')
+        seller_code = request.data.get('seller_code')
+        product_name = request.data.get('product_name')
+        product_serial_no = request.data.get('product_serial_no')
         support_status = SupportStatus.NEW.value
         if not support_category_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide support_category_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_400_BAD_REQUEST)
-        save_query(support_category_id, order_detail_id, user_id, support_status, comment)
+        if not(seller_code or order_detail_id):
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Either seller_code or order_detail_id is mandatory",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no)
         return Response({"details": "Query added successfully",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

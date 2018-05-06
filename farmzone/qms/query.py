@@ -1,6 +1,7 @@
 from farmzone.support.models import Support, SupportStatus, SupportCategory
 from farmzone.support.serializers import SupportSerializer
 from farmzone.order.models import OrderDetail
+from farmzone.sellers.models import Seller
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 from farmzone.util_config.tasks import send_sms_to_user_id
 from farmzone.notification.keys import query as keys
@@ -74,7 +75,7 @@ def accept_query(query_id, seller_code):
         support.save()
 
 
-def save_query(support_category_id, order_detail_id, user_id, support_status, comment):
+def save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no):
     support_category = SupportCategory.objects.filter(id=support_category_id).first()
     if not support_category:
         logger.info("support_category_id does not match any support category {0}".format(support_category_id))
@@ -91,7 +92,22 @@ def save_query(support_category_id, order_detail_id, user_id, support_status, co
                 "details": "Please provide valid order_detail_id parameter",
                 "status_code": "INVALID_PROVIDED_FIELD"
             })
+    seller = None
+    if seller_code:
+        seller = Seller.objects.filter(seller_code=seller_code).first()
+        if not seller:
+            logger.info("seller_code does not match any seller {0}".format(seller_code))
+            raise CustomAPI400Exception({
+                "details": "Please provide valid seller_code parameter",
+                "status_code": "INVALID_PROVIDED_FIELD"
+            })
+        if not product_name:
+            logger.info("product_name is mandatory if seller {0} given".format(seller_code))
+            raise CustomAPI400Exception({
+                "details": "Please provide product_name parameter",
+                "status_code": "INVALID_REQUIRED_FIELD"
+            })
     logger.info("Processing Request to add query for user {0}".format(user_id))
     with transaction.atomic():
-        Support.add_query(user_id, order_detail, support_category, support_status, comment)
+        Support.add_query(user_id, order_detail, support_category, support_status, comment, seller, product_name, product_serial_no)
     send_sms_to_user_id(user_id, keys.buyer_save_query_buyer_key, order_detail_id=order_detail_id)
