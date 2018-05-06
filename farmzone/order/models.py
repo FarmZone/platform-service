@@ -69,3 +69,15 @@ class OrderDetail(TimestampedModel):
         return "{0}# {1}#".format(self.order, self.seller_sub_product)
 
 
+class OrderDetailProductIdentifier(TimestampedModel):
+    order_detail = models.ForeignKey(OrderDetail)
+    product_identifier = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = "order_detail_product_identifier"
+        verbose_name = "Order Detail Product Identifier"
+        verbose_name_plural = "Order Product Identifiers"
+
+    def __str__(self):
+        return "{0}# {1}#".format(self.order_detail, self.product_identifier)
+

@@ -2,19 +2,6 @@ from django.contrib import admin
 from .models import *
 
 
-# class CartAdmin(admin.ModelAdmin):
-#     model = Cart
-#     fieldsets = (
-#         (None, {'fields': ('user', 'seller_sub_product', 'price', 'discount')}),
-#     )
-#     list_display = ['user', 'seller_sub_product', 'price', 'discount']
-#
-#     def get_readonly_fields(self, request, obj=None):
-#         if obj: # editing an existing object
-#             return self.readonly_fields + ('user', 'seller_sub_product', 'price', 'discount')
-#         return self.readonly_fields
-
-
 class OrderDetailInlineAdmin(admin.TabularInline):
     model = OrderDetail
     fieldsets = (
@@ -48,6 +35,13 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
 
-# admin.site.register(Cart, CartAdmin)
-# admin.site.register(OrderDetail, OrderDetailAdmin)
+class OrderDetailProductIdentifierAdmin(admin.ModelAdmin):
+    model = OrderDetailProductIdentifier
+    fieldsets = (
+        (None, {'fields': ('order_detail', 'product_identifier')}),
+    )
+    list_display = ['order_detail', 'product_identifier']
+
+
 admin.site.register(Orders, OrderAdmin)
+admin.site.register(OrderDetailProductIdentifier, OrderDetailProductIdentifierAdmin)

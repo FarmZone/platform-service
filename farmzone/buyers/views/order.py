@@ -96,12 +96,18 @@ class CompleteOrderView(BaseAPIView):
 
     def post(self, request, user_id=None, app_version=None):
         order_detail_id = request.data.get('order_detail_id')
+        product_identifiers = request.data.get('product_identifiers')
         if not order_detail_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide order_detail_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_400_BAD_REQUEST)
-        complete_order(order_detail_id, user_id)
+        if not product_identifiers:
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide product_identifiers parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        complete_order(order_detail_id, user_id, product_identifiers)
         return Response({"details": "Order completed successfully",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

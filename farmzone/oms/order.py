@@ -1,4 +1,4 @@
-from farmzone.order.models import OrderDetail, OrderStatus, Orders, ORDER_CANCELLED_STATUS
+from farmzone.order.models import OrderDetail, OrderStatus, Orders, ORDER_CANCELLED_STATUS, OrderDetailProductIdentifier
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 from collections import OrderedDict
 from farmzone.util_config.db import execute_query
@@ -247,7 +247,7 @@ def dispatch_order(order_detail_id, seller_code):
         order_detail.save()
 
 
-def complete_order(order_detail_id, user_id):
+def complete_order(order_detail_id, user_id, product_identifiers):
     order_detail = OrderDetail.objects.filter(id=order_detail_id, order__user_id=user_id).first()
     if not order_detail:
         logger.info("order_detail_id does not match any order detail {0} for given user {1}".format(order_detail_id, user_id))
@@ -261,7 +261,10 @@ def complete_order(order_detail_id, user_id):
             "details": "Order Detail is not in valid state of Dispatched",
             "status_code": "INVALID_ORDER_DETAIL_STATE"
         })
+    logger.info("product_identifiers {0}".format(product_identifiers))
     logger.info("Processing Request to complete order for user {0}".format(user_id))
     with transaction.atomic():
         order_detail.status = OrderStatus.COMPLETED.value
         order_detail.save()
+        for product_identifier in product_identifiers:
+            OrderDetailProductIdentifier.objects.create(order_detail_id=order_detail_id, product_identifier=product_identifier)
