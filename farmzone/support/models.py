@@ -8,10 +8,16 @@ from django.db.models.signals import post_save
 logger = logging.getLogger(__name__)
 
 
+class SupportType(ModelEnum):
+    ORDER = "ORDER"
+    QUERY = "QUERY"
+
+
 class SupportCategory(TimestampedModel):
     category_code = models.CharField(max_length=20, blank=True, null=True, unique=True)
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
+    type = models.CharField(choices=SupportType.get_values(), max_length=30, default=SupportType.QUERY.value)
 
     class Meta:
         db_table = "support_category"

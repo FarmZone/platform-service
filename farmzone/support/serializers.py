@@ -12,10 +12,14 @@ class SupportCategorySerializer(serializers.ModelSerializer):
 
 class SupportSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    comment = serializers.CharField
+    comment = serializers.SerializerMethodField()
     status = serializers.CharField
     support_category = SupportCategorySerializer()
 
     class Meta:
         model = Support
         fields = ('user', 'comment', 'status', 'support_category')
+
+    def get_comment(self, obj):
+        support_category = obj.support_category
+        return support_category.name if support_category.id!=999 else obj.comment

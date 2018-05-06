@@ -14,10 +14,10 @@ class SupportAdmin(admin.ModelAdmin):
 class SupportCategoryAdmin(admin.ModelAdmin):
     model = SupportCategory
     fieldsets = (
-        (None, {'fields': ('category_code', 'name', 'description')}),
+        (None, {'fields': ('category_code', 'name', 'type', 'description')}),
     )
     readonly_fields = ('category_code',)
-    list_display = ['category_code', 'name', 'description']
+    list_display = ['category_code', 'name', 'type', 'description']
     search_fields = ['name']
 
 
