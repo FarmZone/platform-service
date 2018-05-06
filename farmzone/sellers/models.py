@@ -109,3 +109,22 @@ class SellerSubProduct(TimestampedModel):
 
     def __str__(self):
         return "{0}#{1}".format(self.seller.name, self.sub_product)
+
+
+class UserProduct(TimestampedModel):
+    seller = models.ForeignKey(Seller)
+    user = models.ForeignKey(User)
+    product_name = models.CharField(max_length=100)
+    product_serial_no = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        db_table = "user_product"
+        verbose_name = "User Product"
+        verbose_name_plural = "User Products"
+
+    def __str__(self):
+        return "{0}#{1}#{2}".format(self.seller.name, self.product_name, self.product_serial_no)
+
+    @classmethod
+    def add_user_product(cls, seller, product_name, product_serial_no, user_id):
+        UserProduct.objects.create(seller=seller, product_name=product_name, product_serial_no=product_serial_no, user_id=user_id)

@@ -71,7 +71,7 @@ class OrderDetail(TimestampedModel):
 
 class OrderDetailProductIdentifier(TimestampedModel):
     order_detail = models.ForeignKey(OrderDetail)
-    product_identifier = models.CharField(max_length=100)
+    product_identifier = models.CharField(max_length=100, unique=True)
 
     class Meta:
         db_table = "order_detail_product_identifier"
@@ -80,4 +80,9 @@ class OrderDetailProductIdentifier(TimestampedModel):
 
     def __str__(self):
         return "{0}# {1}#".format(self.order_detail, self.product_identifier)
+
+    @classmethod
+    def add_order_detail_product_identifier(cls, order_detail_id, product_identifier):
+        OrderDetailProductIdentifier.objects.create(order_detail_id=order_detail_id,
+                                                    product_identifier=product_identifier)
 

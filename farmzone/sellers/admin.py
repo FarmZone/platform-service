@@ -32,7 +32,14 @@ class SellerSubProductAdmin(admin.ModelAdmin):
         return self.readonly_fields
 
 
+class UserProductAdmin(admin.ModelAdmin):
+    model = UserProduct
+    list_display = ['user', 'seller', 'product_name', 'product_serial_no']
+
+
+
 admin.site.register(Seller, SellerAdmin)
 admin.site.register(SellerOwner, SellerOwnerAdmin)
 admin.site.register(PreferredSeller, PreferredSellerAdmin)
 admin.site.register(SellerSubProduct, SellerSubProductAdmin)
+admin.site.register(UserProduct, UserProductAdmin)

@@ -107,6 +107,12 @@ class CompleteOrderView(BaseAPIView):
             return Response({"details": "Please provide product_identifiers parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_400_BAD_REQUEST)
+        product_identifiers_set = set(product_identifiers)
+        if len(product_identifiers)!= len(product_identifiers_set):
+            logger.info("Duplicate product identifiers. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide unique product identifiers",
+                             "status_code": "DUPLICATE_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
         complete_order(order_detail_id, user_id, product_identifiers)
         return Response({"details": "Order completed successfully",
                              "status_code": "SUCCESS"},

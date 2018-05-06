@@ -1,5 +1,6 @@
 from farmzone.util_config.db import execute_query
-from farmzone.sellers.models import SellerSubProduct
+from farmzone.sellers.models import SellerSubProduct, Seller, UserProduct
+from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 from farmzone.util_config import generate_public_s3_access_url, str_to_key_value
 from django.db.models import Count
 from collections import OrderedDict
@@ -137,3 +138,21 @@ def get_seller_product_detail(seller_code, product_code):
 
 def get_buyer_product_detail(seller_code, product_code):
     return get_seller_product_detail(seller_code, product_code)
+
+
+def add_user_product(seller_code, product_name, product_serial_no, user_id):
+    seller = Seller.objects.filter(seller_code=seller_code).first()
+    if not seller:
+        logger.info("Seller not found for given code {0}".format(seller_code))
+        raise CustomAPI400Exception({
+            "details": "Given seller_code is not a valid code",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    duplicate = UserProduct.objects.filter(product_serial_no=product_serial_no).first()
+    if duplicate:
+        logger.info("product_serial_no already exists {0}".format(product_serial_no))
+        raise CustomAPI400Exception({
+            "details": "Given product_serial_no already exists",
+            "status_code": "DUPLICATE_REQUIRED_FIELDS"
+        })
+    UserProduct.add_user_product(seller, product_name, product_serial_no, user_id)

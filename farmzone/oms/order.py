@@ -263,8 +263,15 @@ def complete_order(order_detail_id, user_id, product_identifiers):
         })
     logger.info("product_identifiers {0}".format(product_identifiers))
     logger.info("Processing Request to complete order for user {0}".format(user_id))
+    duplicate = OrderDetailProductIdentifier.objects.filter(product_identifier__in=product_identifiers).first()
+    if duplicate:
+        logger.info("Product Identifiers already exists {0}".format(product_identifiers))
+        raise CustomAPI400Exception({
+            "details": "Product Identifiers already exists",
+            "status_code": "INVALID_PRODUCT_IDENTIFIER"
+        })
     with transaction.atomic():
         order_detail.status = OrderStatus.COMPLETED.value
         order_detail.save()
         for product_identifier in product_identifiers:
-            OrderDetailProductIdentifier.objects.create(order_detail_id=order_detail_id, product_identifier=product_identifier)
+            OrderDetailProductIdentifier.add_order_detail_product_identifier(order_detail_id, product_identifier)
