@@ -48,8 +48,10 @@ class UserSerializer(serializers.ModelSerializer):
     def get_address(self, obj):
         address = Address.objects.select_related("state").filter(user=obj).first()
         if address:
-            return {"address_line1":address.address_line1, "address_line2":address.address_line2
-                , "address_line3":address.address_line3, "state":address.state.name}
+            return {"address_line1":address.address_line1 if address.address_line1 else ""
+                , "address_line2":address.address_line2 if address.address_line2 else ""
+                , "address_line3":address.address_line3 if address.address_line3 else ""
+                , "state":address.state.name}
         else:
             return {}
 

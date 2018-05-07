@@ -1,10 +1,10 @@
 from farmzone.support.models import Support, SupportStatus, SupportCategory
 from farmzone.support.serializers import SupportSerializer
 from farmzone.order.models import OrderDetail
-from farmzone.sellers.models import Seller
+from farmzone.sellers.models import Seller, SellerOwner
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
-from farmzone.util_config.tasks import send_sms_to_user_id
-from farmzone.notification.keys import query as keys
+from farmzone.notification import notification
+
 from django.db import transaction
 import logging
 logger = logging.getLogger(__name__)
@@ -52,6 +52,7 @@ def resolve_query(query_id, user_id):
     with transaction.atomic():
         support.status = SupportStatus.RESOLVED.value
         support.save()
+    notification.send_resolve_query_notification(user_id, query_id)
 
 
 def accept_query(query_id, seller_code):
@@ -73,6 +74,7 @@ def accept_query(query_id, seller_code):
     with transaction.atomic():
         support.status = SupportStatus.ACCEPTED.value
         support.save()
+    notification.send_accept_query_notification(query_id)
 
 
 def save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no):
@@ -109,5 +111,24 @@ def save_query(support_category_id, order_detail_id, user_id, support_status, co
             })
     logger.info("Processing Request to add query for user {0}".format(user_id))
     with transaction.atomic():
-        Support.add_query(user_id, order_detail, support_category, support_status, comment, seller, product_name, product_serial_no)
-    send_sms_to_user_id(user_id, keys.buyer_save_query_buyer_key, order_detail_id=order_detail_id)
+        support = Support.add_query(user_id, order_detail, support_category, support_status, comment, seller, product_name, product_serial_no)
+        notification.send_save_query_notification(user_id, support.id)
+
+
+def get_seller_user_by_query(query_id):
+    support = Support.objects.select_related("order_detail", "seller").filter(id=query_id).first()
+    if support:
+        seller = support.seller if support.seller \
+            else support.order_detail.seller_sub_product.seller if support.order_detail else None
+        if seller:
+            seller_owner = SellerOwner.objects.select_related("user").filter(seller=seller).first()
+            if seller_owner:
+                return seller_owner.user
+    return None
+
+
+def get_buyer_user_by_query(query_id):
+    support = Support.objects.select_related("user").filter(id=query_id).first()
+    if support:
+        return support.user
+    return None

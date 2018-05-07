@@ -16,6 +16,7 @@ from .constants import OTP_STATUS
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.db import transaction, IntegrityError
+from farmzone.notification import notification
 
 logger = logging.getLogger(__name__)
 
@@ -147,6 +148,11 @@ class VerifyOTPView(APIView):
                 try:
                     user = phone_number_record.user
                     auth_token = Token.objects.get(user=user)
+                    if not user.is_welcome_sms_sent:
+                        logger.debug("sending welcome msg to user {0}".format(user))
+                        notification.send_create_user_notification(user.id)
+                        user.is_welcome_sms_sent=True
+                        user.save()
                 except Token.DoesNotExist:
                     return Response(
                         {'status_code': 'TOKEN_DOES_NOT_EXIST', 'details': 'No auth token found for this user'},

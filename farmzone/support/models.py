@@ -65,6 +65,7 @@ class Support(TimestampedModel):
     @classmethod
     def add_query(cls, user_id, order_detail, support_category, status, comment, seller, product_name, product_serial_no):
         logger.info("Creating new support entry for user {0} ".format(user_id))
-        Support.objects.create(user_id=user_id, support_category=support_category, order_detail=order_detail
+        support = Support.objects.create(user_id=user_id, support_category=support_category, order_detail=order_detail
                             , status=status, comment=comment, seller=seller, product_name=product_name
                                , product_serial_no=product_serial_no)
+        return support

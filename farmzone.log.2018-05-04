@@ -1,5 +1,0 @@
-WARNING 2018-05-06 06:56:03,432 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
-INFO 2018-05-06 06:56:03,435 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
-INFO 2018-05-06 06:56:03,435 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_save_query_buyer_sms
-INFO 2018-05-06 06:56:04,065 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
-WARNING 2018-05-06 06:56:04,066 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}

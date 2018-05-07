@@ -1,5 +1,6 @@
 from farmzone.util_config.db import execute_query
 from farmzone.sellers.models import SellerSubProduct, Seller, UserProduct
+from farmzone.cms.serializer import UserProductsSerializer
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 from farmzone.util_config import generate_public_s3_access_url, str_to_key_value
 from django.db.models import Count
@@ -156,3 +157,11 @@ def add_user_product(seller_code, product_name, product_serial_no, user_id):
             "status_code": "DUPLICATE_REQUIRED_FIELDS"
         })
     UserProduct.add_user_product(seller, product_name, product_serial_no, user_id)
+
+
+def get_user_products(user_id):
+    return UserProduct.objects.filter(user_id=user_id)
+
+
+def get_user_products_serializer():
+    return UserProductsSerializer

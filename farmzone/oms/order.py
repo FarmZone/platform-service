@@ -8,6 +8,8 @@ from django.db.models import Sum, F, DecimalField
 import logging
 import decimal
 import arrow
+from farmzone.notification import notification
+from farmzone.sellers.models import SellerOwner
 logger = logging.getLogger(__name__)
 
 
@@ -181,6 +183,7 @@ def place_order(user_id, id):
         if total_price and total_price["total_price"]:
             Orders.objects.filter(id=id, user_id=user_id)\
                 .update(total_price=total_price["total_price"], created_at=now, updated_at=now)
+    notification.send_place_order_notification(user_id, id)
 
 
 def cancel_order(user_id, id):
@@ -193,6 +196,7 @@ def cancel_order(user_id, id):
     with transaction.atomic():
         OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status__in=ORDER_CANCELLED_STATUS)\
             .update(status=OrderStatus.CANCELLED.value)
+    notification.send_cancel_order_notification(user_id, id)
 
 
 def save_order_rating(order_detail_id, rating, user_id):
@@ -225,6 +229,7 @@ def accept_order(order_detail_id, seller_code):
     with transaction.atomic():
         order_detail.status = OrderStatus.ACCEPTED.value
         order_detail.save()
+    notification.send_accept_order_notification(order_detail_id)
 
 
 def dispatch_order(order_detail_id, seller_code):
@@ -245,6 +250,7 @@ def dispatch_order(order_detail_id, seller_code):
     with transaction.atomic():
         order_detail.status = OrderStatus.DISPATCHED.value
         order_detail.save()
+    notification.send_dispatch_order_notification(order_detail_id)
 
 
 def complete_order(order_detail_id, user_id, product_identifiers):
@@ -275,3 +281,39 @@ def complete_order(order_detail_id, user_id, product_identifiers):
         order_detail.save()
         for product_identifier in product_identifiers:
             OrderDetailProductIdentifier.add_order_detail_product_identifier(order_detail_id, product_identifier)
+    notification.send_complete_order_notification(order_detail_id)
+
+
+def get_seller_user_by_order_detail(order_detail_id):
+    order_detail = OrderDetail.objects.select_related("seller_sub_product", "seller_sub_product__seller").filter(id=order_detail_id).first()
+    if order_detail:
+        seller = order_detail.seller_sub_product.seller
+        if seller:
+            seller_owner = SellerOwner.objects.select_related("user").filter(seller=seller).first()
+            if seller_owner:
+                return seller_owner.user
+    return None
+
+
+def get_buyer_user_by_order_detail(order_detail_id):
+    order_detail = OrderDetail.objects.select_related("order", "order__user").filter(id=order_detail_id).first()
+    if order_detail:
+        return order_detail.order.user
+    return None
+
+
+def get_order_by_order_detail(order_detail_id):
+    order_detail = OrderDetail.objects.select_related("order").filter(id=order_detail_id).first()
+    if order_detail:
+        return order_detail.order
+    return None
+
+
+def get_seller_users_by_order(order_id):
+    seller_ids = OrderDetail.objects.filter(order_id=order_id).values_list("seller_sub_product__seller__id")
+    if seller_ids:
+        seller_users = SellerOwner.objects.filter(seller_id__in=seller_ids).values_list("user__id",flat=True).distinct()
+        seller_users = list(seller_users)
+        logger.debug("seller users {0}".format(seller_users))
+        return seller_users
+    return None

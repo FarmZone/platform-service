@@ -1,7 +1,7 @@
 from .base import BaseAPIView, BaseModelViewSet
 from rest_framework.response import Response
 from farmzone.cms.product import get_buyer_products_summary, get_buyer_products_by_category\
-    , get_buyer_product_detail, add_user_product
+    , get_buyer_product_detail, add_user_product, get_user_products, get_user_products_serializer
 from farmzone.settings.common import PAGINATION_DEFAULT_PER_PAGE_RECORD_COUNT
 from rest_framework.views import Response, status
 import logging
@@ -59,3 +59,12 @@ class AddMyProduct(BaseAPIView):
         return Response({"details": "Product added successfully",
                          "status_code": "SUCCESS"},
                         status.HTTP_200_OK)
+
+
+class MyProductsViewSet(BaseModelViewSet):
+    serializer_class = get_user_products_serializer()
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return get_user_products(user_id)
+

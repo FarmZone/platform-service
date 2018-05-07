@@ -4,7 +4,7 @@ from django.conf.urls import url
 from farmzone.buyers.views.order import BuyerUpcomingOrdersView, BuyerCompletedOrdersView, PlaceOrder, CancelOrder\
     , SaveOrderRatingView, CompleteOrderView
 from farmzone.buyers.views.product import BuyerProductsByCategoryView, BuyerProductsSummaryView, BuyerProductDetailView\
-    , AddMyProduct
+    , AddMyProduct, MyProductsViewSet
 from farmzone.buyers.views.support import BuyerPendingQueriesViewSet, BuyerResolvedQueriesViewSet, SaveQueryView, ResolveQueryView
 from farmzone.buyers.views.cart import CartDetailView, AddToCartView
 from farmzone.buyers.views.user import MySellersViewSet
@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'buyer/(?P<user_id>[\w]+)/complete_order/?$', CompleteOrderView.as_view()),
     url(r'buyer/(?P<user_id>[\w]+)/my_sellers/?$', MySellersViewSet.as_view({'get': 'list'})),
     url(r'buyer/(?P<user_id>[\w]+)/add_my_product/?$', AddMyProduct.as_view()),
+    url(r'buyer/(?P<user_id>[\w]+)/my_products/?$', MyProductsViewSet.as_view({'get': 'list'})),
 ]

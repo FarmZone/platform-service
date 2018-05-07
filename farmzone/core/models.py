@@ -37,6 +37,7 @@ class User(AbstractUser, TimestampedModel):
     img_thumb = models.ImageField(upload_to=upload_thumb_image_path, null=True, blank=True,
                                   storage=S3Boto3Storage(bucket=settings.AWS_STORAGE_PUBLIC_BUCKET_NAME))
     is_admin = models.BooleanField(default=False)
+    is_welcome_sms_sent = models.BooleanField(default=False)
     #reset_password = models.BooleanField(default=True, )
 
     class Meta:

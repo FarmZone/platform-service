@@ -1,0 +1,12 @@
+en:
+  buyer_place_order_buyer_sms: "Thank you for booking your order {order_id} with us."
+  buyer_place_order_seller_sms: "You have received an order {order_id}."
+  buyer_cancel_order_buyer_sms: "Your order {order_id} has been cancelled successfully."
+  buyer_cancel_order_seller_sms: "Your order {order_id} has been cancelled by user."
+  seller_accept_order_buyer_sms: "Your order {order_id} has been accepted by seller."
+  seller_accept_order_seller_sms: "You have accepted order {order_id} successfully."
+  seller_dispatch_order_buyer_sms: "You order {order_id} has been dispatched by seller."
+  seller_dispatch_order_seller_sms: "Your have marked order {order_id} dispatched successfully."
+  buyer_complete_order_buyer_sms: "You have marked order {order_id} delivered successfully."
+  buyer_complete_order_seller_sms: "Your order {order_id} has been marked delivered by user."
+
