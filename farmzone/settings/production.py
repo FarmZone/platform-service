@@ -5,7 +5,11 @@ ALLOWED_HOSTS = [
                  'localhost', '127.0.0.1',
                  'farmzone-dev.ap-south-1.elasticbeanstalk.com',
                  'a3agri.com',
-                 'awseb-e-r-AWSEBLoa-DZ9D70LS2UYI-1359223895.ap-south-1.elb.amazonaws.com'
+                 'awseb-e-r-AWSEBLoa-DZ9D70LS2UYI-1359223895.ap-south-1.elb.amazonaws.com',
+                 'dev.a3agri.com',
+                 'stage.a3agri.com',
+                 'qa.a3agri.com',
+                 'www.a3agri.com',
                ]
 
 CSRF_COOKIE_SECURE = False
