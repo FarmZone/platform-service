@@ -4,7 +4,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
                  'localhost', '127.0.0.1',
                  'farmzone-dev.ap-south-1.elasticbeanstalk.com',
-                 'a3agri.com'
+                 'a3agri.com',
+                 'awseb-e-r-AWSEBLoa-DZ9D70LS2UYI-1359223895.ap-south-1.elb.amazonaws.com'
                ]
 
 CSRF_COOKIE_SECURE = False
