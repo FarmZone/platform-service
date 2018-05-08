@@ -183,7 +183,8 @@ def place_order(user_id, id):
         if total_price and total_price["total_price"]:
             Orders.objects.filter(id=id, user_id=user_id)\
                 .update(total_price=total_price["total_price"], created_at=now, updated_at=now)
-    notification.send_place_order_notification(user_id, id)
+    seller_user_ids = get_seller_users_by_order(id)
+    notification.send_place_order_notification(user_id, id, seller_user_ids)
 
 
 def cancel_order(user_id, id):
@@ -196,7 +197,8 @@ def cancel_order(user_id, id):
     with transaction.atomic():
         OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status__in=ORDER_CANCELLED_STATUS)\
             .update(status=OrderStatus.CANCELLED.value)
-    notification.send_cancel_order_notification(user_id, id)
+    seller_user_ids = get_seller_users_by_order(id)
+    notification.send_cancel_order_notification(user_id, id, seller_user_ids)
 
 
 def save_order_rating(order_detail_id, rating, user_id):
@@ -229,7 +231,10 @@ def accept_order(order_detail_id, seller_code):
     with transaction.atomic():
         order_detail.status = OrderStatus.ACCEPTED.value
         order_detail.save()
-    notification.send_accept_order_notification(order_detail_id)
+    order = get_order_by_order_detail(order_detail_id)
+    seller_user = get_seller_user_by_order_detail(order_detail_id)
+    buyer_user = get_buyer_user_by_order_detail(order_detail_id)
+    notification.send_accept_order_notification(order_detail_id, order, buyer_user, seller_user)
 
 
 def dispatch_order(order_detail_id, seller_code):
@@ -250,7 +255,10 @@ def dispatch_order(order_detail_id, seller_code):
     with transaction.atomic():
         order_detail.status = OrderStatus.DISPATCHED.value
         order_detail.save()
-    notification.send_dispatch_order_notification(order_detail_id)
+    order = get_order_by_order_detail(order_detail_id)
+    seller_user = get_seller_user_by_order_detail(order_detail_id)
+    buyer_user = get_buyer_user_by_order_detail(order_detail_id)
+    notification.send_dispatch_order_notification(order_detail_id, order, buyer_user, seller_user)
 
 
 def complete_order(order_detail_id, user_id, product_identifiers):
@@ -281,7 +289,10 @@ def complete_order(order_detail_id, user_id, product_identifiers):
         order_detail.save()
         for product_identifier in product_identifiers:
             OrderDetailProductIdentifier.add_order_detail_product_identifier(order_detail_id, product_identifier)
-    notification.send_complete_order_notification(order_detail_id)
+    order = get_order_by_order_detail(order_detail_id)
+    seller_user = get_seller_user_by_order_detail(order_detail_id)
+    buyer_user = get_buyer_user_by_order_detail(order_detail_id)
+    notification.send_complete_order_notification(order_detail_id, order, buyer_user, seller_user)
 
 
 def get_seller_user_by_order_detail(order_detail_id):
