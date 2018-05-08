@@ -14,11 +14,12 @@ class SupportSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     comment = serializers.SerializerMethodField()
     status = serializers.CharField
+    id = serializers.IntegerField
     support_category = SupportCategorySerializer()
 
     class Meta:
         model = Support
-        fields = ('user', 'comment', 'status', 'support_category')
+        fields = ('user', 'comment', 'status', 'support_category', 'id')
 
     def get_comment(self, obj):
         support_category = obj.support_category
