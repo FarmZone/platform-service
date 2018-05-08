@@ -43,8 +43,9 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
         order["id"] = item.id
         order["created_at"] = utc_standard_format_to_preferred_tz_timestp(item.created_at)
         order["user"] = {"full_name": item.full_name, "email": item.email, "phone_number": item.phone_number,
-                         "address": {"address_line1":item.address_line1, "address_line2":item.address_line2
-                             , "address_line3":item.address_line3, "state":item.state }}
+                         "address": {"address_line1":item.address_line1 if item.address_line1 else ""
+                             , "address_line2":item.address_line2 if item.address_line2 else ""
+                             , "address_line3":item.address_line3 if item.address_line3 else "", "state":item.state }}
         if product_count_map and product_count_map[item.id]:
             order["product_count"] = product_count_map[item.id]
         products = order["products"]
