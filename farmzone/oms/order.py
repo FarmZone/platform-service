@@ -52,6 +52,7 @@ def format_orders(result, product_count_map=None, offset=None, count=None):
         sub_product_map = {}
         sub_product_map["product_name"] = item.product_name
         sub_product_map["product_code"] = item.product_code
+        sub_product_map["category_code"] = item.category_code
         sub_product_map["product_img_orig"] = generate_public_s3_access_url(item.product_img_orig)
         sub_product_map["product_img_thumb"] = generate_public_s3_access_url(item.product_img_thumb)
         sub_product_map["seller_code"] = item.seller_code
