@@ -1,6 +1,6 @@
 from .base import BaseModelViewSet, BaseAPIView
-from farmzone.ums.user import get_user_sellers, get_user_sellers_serializer, get_user_unassociated_sellers
-from rest_framework.response import Response
+from farmzone.ums.user import get_user_sellers, get_user_sellers_serializer, get_user_unassociated_sellers, add_seller
+from rest_framework.views import Response, status
 import logging
 logger = logging.getLogger(__name__)
 
@@ -15,6 +15,22 @@ class MySellersViewSet(BaseModelViewSet):
 
 class UnassociatedSellersView(BaseAPIView):
     def get(self, request, user_id=None, app_version=None):
-        logger.info("Processing request to fetch unassociated sellers for user {0}".format(user_id))
-        unassociated_sellers = get_user_unassociated_sellers(user_id)
+        q = request.GET.get('q')
+        if not q:
+            return Response({"sellers": []})
+        unassociated_sellers = get_user_unassociated_sellers(user_id, q)
         return Response({"sellers": unassociated_sellers})
+
+
+class AddSellerView(BaseAPIView):
+    def post(self, request, user_id=None, app_version=None):
+        seller_code = request.data.get('seller_code')
+        if not seller_code:
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide seller_code parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        add_seller(seller_code, user_id)
+        return Response({"details": "Seller added successfully",
+                         "status_code": "SUCCESS"},
+                        status.HTTP_200_OK)

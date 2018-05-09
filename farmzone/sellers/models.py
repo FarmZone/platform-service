@@ -94,6 +94,10 @@ class PreferredSeller(TimestampedModel):
         else:
             logger.debug("Seller {0} already associated with user {1}".format(seller_code, user.id))
 
+    @classmethod
+    def add_seller(cls, seller, user_id):
+        PreferredSeller.objects.create(user_id=user_id, seller=seller)
+
 
 class SellerSubProduct(TimestampedModel):
     seller = models.ForeignKey(Seller)
