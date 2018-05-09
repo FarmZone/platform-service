@@ -6,7 +6,7 @@ from .common import *
 CELERY_ALWAYS_EAGER = True
 ########## END CELERY
 
-TWO_FACTOR_API_KEY = os.environ.get('TWO_FACTOR_API_KEY', '5e614f64-5bd9-11e7-94da-0200cd936042')
+TWO_FACTOR_API_KEY = os.environ.get('TWO_FACTOR_API_KEY')
 GOOGLE_DISTANCE_MATRIX_API_KEY = os.environ.get('GOOGLE_DISTANCE_MATRIX_API_KEY')
 EXOTEL_SID = os.environ.get('EXOTEL_SID', 'farmzone')
 EXOTEL_TOKEN = os.environ.get('EXOTEL_TOKEN', '85af8ff6b716f8e5fdc00332664ff5142cf5e8ca')

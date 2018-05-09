@@ -1,0 +1,678 @@
+ERROR 2018-05-07 15:22:19,564 django.request Internal Server Error: /api/1.0.0/buyer/1/add_my_product/
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/mysql/base.py", line 101, in execute
+    return self.cursor.execute(query, args)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 166, in execute
+    result = self._query(query)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 856, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1057, in _read_query_result
+    result.read()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1340, in read
+    first_packet = self.connection._read_packet()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1014, in _read_packet
+    packet.check_error()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 393, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/err.py", line 107, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1054, "Unknown column 'users.is_welcome_sms_sent' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/util_config/middleware.py", line 20, in __call__
+    if request.user.is_authenticated() and not self.has_permission(request):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/utils/functional.py", line 238, in inner
+    self._setup()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/utils/functional.py", line 385, in _setup
+    self._wrapped = self._setupfunc()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/middleware.py", line 24, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/middleware.py", line 12, in get_user
+    request._cached_user = auth.get_user(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/__init__.py", line 213, in get_user
+    user = backend.get_user(user_id)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/backends.py", line 102, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 374, in get
+    num = len(clone)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 232, in __len__
+    self._fetch_all()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 1103, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 53, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 886, in execute_sql
+    raise original_exception
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 876, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 80, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/utils.py", line 94, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/utils/six.py", line 685, in reraise
+    raise value.with_traceback(tb)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/mysql/base.py", line 101, in execute
+    return self.cursor.execute(query, args)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 166, in execute
+    result = self._query(query)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 856, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1057, in _read_query_result
+    result.read()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1340, in read
+    first_packet = self.connection._read_packet()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1014, in _read_packet
+    packet.check_error()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 393, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/err.py", line 107, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.InternalError: (1054, "Unknown column 'users.is_welcome_sms_sent' in 'field list'")
+ERROR 2018-05-07 15:22:19,682 django.server "GET /api/1.0.0/buyer/1/add_my_product/ HTTP/1.1" 500 234124
+ERROR 2018-05-07 16:59:16,165 django.request Internal Server Error: /api/1.0.0/user/profile/
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/mysql/base.py", line 101, in execute
+    return self.cursor.execute(query, args)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 166, in execute
+    result = self._query(query)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 856, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1057, in _read_query_result
+    result.read()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1340, in read
+    first_packet = self.connection._read_packet()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1014, in _read_packet
+    packet.check_error()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 393, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/err.py", line 107, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1054, "Unknown column 'users.is_welcome_sms_sent' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/util_config/middleware.py", line 20, in __call__
+    if request.user.is_authenticated() and not self.has_permission(request):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/utils/functional.py", line 238, in inner
+    self._setup()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/utils/functional.py", line 385, in _setup
+    self._wrapped = self._setupfunc()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/middleware.py", line 24, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/middleware.py", line 12, in get_user
+    request._cached_user = auth.get_user(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/__init__.py", line 213, in get_user
+    user = backend.get_user(user_id)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/contrib/auth/backends.py", line 102, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 374, in get
+    num = len(clone)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 232, in __len__
+    self._fetch_all()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 1103, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 53, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 886, in execute_sql
+    raise original_exception
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 876, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 80, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/utils.py", line 94, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/utils/six.py", line 685, in reraise
+    raise value.with_traceback(tb)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/backends/mysql/base.py", line 101, in execute
+    return self.cursor.execute(query, args)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 166, in execute
+    result = self._query(query)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 856, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1057, in _read_query_result
+    result.read()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1340, in read
+    first_packet = self.connection._read_packet()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 1014, in _read_packet
+    packet.check_error()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/connections.py", line 393, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/pymysql/err.py", line 107, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.InternalError: (1054, "Unknown column 'users.is_welcome_sms_sent' in 'field list'")
+ERROR 2018-05-07 16:59:16,288 django.server "GET /api/1.0.0/user/profile/ HTTP/1.1" 500 234004
+INFO 2018-05-07 17:00:00,493 farmzone.authentication.views Request to fetch user's profile for user_id: 1
+WARNING 2018-05-07 17:00:00,498 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:00:00,500 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:00:59,506 farmzone.authentication.views Request to fetch user's profile for user_id: 1
+WARNING 2018-05-07 17:00:59,510 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:00:59,512 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:13:37,441 farmzone.qms.query Processing Request to add query for user 1
+INFO 2018-05-07 17:13:37,441 farmzone.support.models Creating new support entry for user 1 
+ERROR 2018-05-07 17:13:37,448 django.request Internal Server Error: /api/1.0.0/buyer/1/save_query
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/buyers/views/support.py", line 48, in post
+    save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/qms/query.py", line 115, in save_query
+    notification.send_save_query_notification(user_id, support.id)
+AttributeError: 'NoneType' object has no attribute 'id'
+ERROR 2018-05-07 17:13:37,520 django.server "POST /api/1.0.0/buyer/1/save_query HTTP/1.1" 500 115259
+INFO 2018-05-07 17:15:30,765 farmzone.qms.query order_detail_id does not match any order_detail 350
+INFO 2018-05-07 17:16:00,876 farmzone.qms.query Processing Request to add query for user 1
+INFO 2018-05-07 17:16:00,876 farmzone.support.models Creating new support entry for user 1 
+ERROR 2018-05-07 17:16:00,938 django.request Internal Server Error: /api/1.0.0/buyer/1/save_query
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/buyers/views/support.py", line 48, in post
+    save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/qms/query.py", line 115, in save_query
+    notification.send_save_query_notification(user_id, support.id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 59, in send_save_query_notification
+    seller_user = get_seller_user_by_query(query_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/qms/query.py", line 119, in get_seller_user_by_query
+    support = Support.objects.select_related("order_detail, seller").filter(id=query_id).first()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 562, in first
+    objects = list((self if self.ordered else self.order_by('pk'))[:1])
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 250, in __iter__
+    self._fetch_all()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 1103, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 53, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 863, in execute_sql
+    sql, params = self.as_sql()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 412, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 46, in pre_sql_setup
+    self.setup_query()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 37, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 213, in get_select
+    related_klass_infos = self.get_related_selections(select)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 789, in get_related_selections
+    ', '.join(_get_field_choices()) or '(none)',
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'order_detail, seller'. Choices are: support_category, order_detail, user, seller
+WARNING 2018-05-07 17:16:00,944 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:16:00,946 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:16:00,947 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_save_query_buyer_sms
+ERROR 2018-05-07 17:16:01,031 django.server "POST /api/1.0.0/buyer/1/save_query HTTP/1.1" 500 169453
+INFO 2018-05-07 17:16:02,089 farmzone.notification.sms {'RestException': {'Message': 'Not allowed to send promotional SMS(s).', 'Status': 403}}
+WARNING 2018-05-07 17:16:02,089 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Message': 'Not allowed to send promotional SMS(s).', 'Status': 403}}
+INFO 2018-05-07 17:20:11,288 farmzone.qms.query Processing Request to add query for user 1
+INFO 2018-05-07 17:20:11,288 farmzone.support.models Creating new support entry for user 1 
+WARNING 2018-05-07 17:20:11,362 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:20:11,365 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:20:11,366 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_save_query_buyer_sms
+WARNING 2018-05-07 17:20:11,376 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:20:11,380 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:20:11,380 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_save_query_seller_sms
+INFO 2018-05-07 17:20:11,961 farmzone.notification.sms {'RestException': {'Message': 'Not allowed to send promotional SMS(s).', 'Status': 403}}
+WARNING 2018-05-07 17:20:11,961 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Message': 'Not allowed to send promotional SMS(s).', 'Status': 403}}
+INFO 2018-05-07 17:20:11,962 farmzone.notification.sms {'RestException': {'Message': 'Not allowed to send promotional SMS(s).', 'Status': 403}}
+WARNING 2018-05-07 17:20:11,962 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Message': 'Not allowed to send promotional SMS(s).', 'Status': 403}}
+INFO 2018-05-07 17:28:55,315 farmzone.qms.query Processing Request to add query for user 1
+INFO 2018-05-07 17:28:55,316 farmzone.support.models Creating new support entry for user 1 
+WARNING 2018-05-07 17:28:55,338 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:28:55,342 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:28:55,342 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_save_query_buyer_sms
+WARNING 2018-05-07 17:28:55,346 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:28:55,350 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:28:55,350 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_save_query_seller_sms
+INFO 2018-05-07 17:28:55,891 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:28:55,892 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:28:55,894 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:28:55,895 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:31:26,954 farmzone.qms.query Processing Request to accept query for seller S0002
+WARNING 2018-05-07 17:31:26,992 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:31:26,995 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:31:26,995 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.seller_accept_query_buyer_sms
+WARNING 2018-05-07 17:31:27,006 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:31:27,008 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:31:27,009 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.seller_accept_query_seller_sms
+INFO 2018-05-07 17:31:27,712 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:31:27,712 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:31:27,716 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:31:27,717 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:33:48,458 farmzone.buyers.views.support Manadatory fields missing. Requested params {'resolve_query': 21}
+INFO 2018-05-07 17:34:01,432 farmzone.qms.query Processing Request to resolve query for user 1
+WARNING 2018-05-07 17:34:01,444 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:34:01,447 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:34:01,447 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_resolve_query_buyer_sms
+WARNING 2018-05-07 17:34:01,456 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:34:01,458 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:34:01,459 farmzone.notification.sms Sending SMS to 9891077610. SMS content query.query.buyer_resolve_query_seller_sms
+INFO 2018-05-07 17:34:02,451 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:34:02,451 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:34:02,469 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:34:02,470 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:36:51,220 farmzone.oms.order Processing Request to accept order detail for seller S0002
+ERROR 2018-05-07 17:36:51,246 django.request Internal Server Error: /api/1.0.0/seller/S0002/accept_order
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/sellers/views/order.py", line 53, in post
+    accept_order(order_detail_id, seller_code)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 232, in accept_order
+    notification.send_accept_order_notification(order_detail_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 23, in send_accept_order_notification
+    buyer_user = get_buyer_user_by_order_detail(order_detail_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 299, in get_buyer_user_by_order_detail
+    order_detail = OrderDetail.objects.select_related("order", "user").filter(id=order_detail_id).first()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 562, in first
+    objects = list((self if self.ordered else self.order_by('pk'))[:1])
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 250, in __iter__
+    self._fetch_all()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 1103, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 53, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 863, in execute_sql
+    sql, params = self.as_sql()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 412, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 46, in pre_sql_setup
+    self.setup_query()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 37, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 213, in get_select
+    related_klass_infos = self.get_related_selections(select)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 789, in get_related_selections
+    ', '.join(_get_field_choices()) or '(none)',
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'user'. Choices are: order, seller_sub_product
+ERROR 2018-05-07 17:36:51,348 django.server "POST /api/1.0.0/seller/S0002/accept_order HTTP/1.1" 500 169193
+INFO 2018-05-07 17:37:48,282 farmzone.oms.order Order status is not in New state to accept ACCEPTED
+INFO 2018-05-07 17:38:27,734 farmzone.oms.order Processing Request to accept order detail for seller S0002
+WARNING 2018-05-07 17:38:27,803 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+ERROR 2018-05-07 17:38:27,803 django.request Internal Server Error: /api/1.0.0/seller/S0002/accept_order
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/sellers/views/order.py", line 53, in post
+    accept_order(order_detail_id, seller_code)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 232, in accept_order
+    notification.send_accept_order_notification(order_detail_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 27, in send_accept_order_notification
+    seller_user = get_seller_user_by_order_detail(order_detail_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 288, in get_seller_user_by_order_detail
+    order_detail = OrderDetail.objects.select_related("seller_sub_product", "seller").filter(id=order_detail_id).first()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 562, in first
+    objects = list((self if self.ordered else self.order_by('pk'))[:1])
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 250, in __iter__
+    self._fetch_all()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 1103, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/query.py", line 53, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 863, in execute_sql
+    sql, params = self.as_sql()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 412, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 46, in pre_sql_setup
+    self.setup_query()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 37, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select()
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 213, in get_select
+    related_klass_infos = self.get_related_selections(select)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/db/models/sql/compiler.py", line 789, in get_related_selections
+    ', '.join(_get_field_choices()) or '(none)',
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'seller'. Choices are: order, seller_sub_product
+INFO 2018-05-07 17:38:27,805 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:38:27,806 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.seller_accept_order_buyer_sms
+ERROR 2018-05-07 17:38:27,896 django.server "POST /api/1.0.0/seller/S0002/accept_order HTTP/1.1" 500 170752
+INFO 2018-05-07 17:38:28,333 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:38:28,333 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:39:07,448 farmzone.oms.order Processing Request to accept order detail for seller S0002
+WARNING 2018-05-07 17:39:07,523 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:39:07,526 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:39:07,526 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.seller_accept_order_buyer_sms
+WARNING 2018-05-07 17:39:07,533 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:39:07,537 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:39:07,537 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.seller_accept_order_seller_sms
+INFO 2018-05-07 17:39:08,314 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:39:08,315 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:39:08,390 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:39:08,391 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:41:06,026 farmzone.oms.order Processing Request to dispatch order detail for seller S0002
+WARNING 2018-05-07 17:41:06,045 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:41:06,048 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:41:06,048 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.seller_dispatch_order_buyer_sms
+WARNING 2018-05-07 17:41:06,056 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:41:06,058 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:41:06,058 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.seller_dispatch_order_seller_sms
+INFO 2018-05-07 17:41:06,627 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:41:06,628 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:41:06,707 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:41:06,708 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:42:49,407 farmzone.buyers.views.order Manadatory fields missing. Requested params {'order_detail_id': 31}
+INFO 2018-05-07 17:44:46,743 farmzone.oms.order product_identifiers ['P0000']
+INFO 2018-05-07 17:44:46,743 farmzone.oms.order Processing Request to complete order for user 1
+WARNING 2018-05-07 17:44:46,774 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:44:46,777 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:44:46,778 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_complete_order_buyer_sms
+WARNING 2018-05-07 17:44:46,783 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:44:46,785 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:44:46,785 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_complete_order_seller_sms
+INFO 2018-05-07 17:44:52,138 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:44:52,138 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:44:52,186 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:44:52,187 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:56:03,217 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+ERROR 2018-05-07 17:56:03,291 django.request Internal Server Error: /api/1.0.0/buyer/1/cancel_order/
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/buyers/views/order.py", line 73, in post
+    cancel_order(user_id, order_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 199, in cancel_order
+    notification.send_cancel_order_notification(user_id, id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 20, in send_cancel_order_notification
+    seller_user_ids = get_seller_users_by_order(order_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 313, in get_seller_users_by_order
+    seller_ids = OrderDetail.objects.select_related("seller_sub_product", "seller").filter(order_id=order_id)\
+AttributeError: 'QuerySet' object has no attribute 'value_list'
+WARNING 2018-05-07 17:56:03,294 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:56:03,296 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:56:03,297 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+ERROR 2018-05-07 17:56:03,354 django.server "POST /api/1.0.0/buyer/1/cancel_order/ HTTP/1.1" 500 120366
+INFO 2018-05-07 17:56:04,766 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:56:04,766 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:56:52,806 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+INFO 2018-05-07 17:57:52,486 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+ERROR 2018-05-07 17:57:52,551 django.request Internal Server Error: /api/1.0.0/buyer/1/cancel_order/
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/buyers/views/order.py", line 73, in post
+    cancel_order(user_id, order_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 199, in cancel_order
+    notification.send_cancel_order_notification(user_id, id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 20, in send_cancel_order_notification
+    seller_user_ids = get_seller_users_by_order(order_id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/oms/order.py", line 316, in get_seller_users_by_order
+    seller_users = SellerOwner.objects.select_related("user").filter(seller_id__in=seller_ids).value_list("user__id")
+AttributeError: 'QuerySet' object has no attribute 'value_list'
+WARNING 2018-05-07 17:57:52,552 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:57:52,554 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:57:52,555 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+ERROR 2018-05-07 17:57:52,612 django.server "POST /api/1.0.0/buyer/1/cancel_order/ HTTP/1.1" 500 120186
+INFO 2018-05-07 17:57:53,263 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:57:53,264 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 17:59:20,417 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+INFO 2018-05-07 17:59:43,096 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 17:59:43,161 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 17:59:43,165 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 17:59:43,165 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 17:59:44,330 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 17:59:44,331 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:06:53,622 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:06:53,705 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:06:53,708 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:06:53,709 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 18:06:54,414 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:06:54,414 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:09:36,634 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:09:36,704 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:09:36,707 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:09:36,708 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 18:09:37,431 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:09:37,432 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:10:59,165 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:10:59,261 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:10:59,264 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:10:59,264 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 18:10:59,706 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:10:59,707 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:12:15,252 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:12:15,336 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:12:15,339 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:12:15,339 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 18:12:15,929 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:12:15,930 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:13:49,313 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:13:49,392 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:13:49,396 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:13:49,397 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 18:13:50,010 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:13:50,011 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:18:12,697 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:18:12,777 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:18:12,779 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:18:12,780 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+WARNING 2018-05-07 18:18:12,787 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+WARNING 2018-05-07 18:18:12,788 farmzone.core.models User 9 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:18:12,790 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:18:12,790 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_seller_sms
+INFO 2018-05-07 18:18:12,790 farmzone.core.models Contact for the user: Anish#9 is None
+INFO 2018-05-07 18:18:12,791 farmzone.core.models Contact for the user: Anish#18 is 8884020101
+INFO 2018-05-07 18:18:12,791 farmzone.notification.sms Sending SMS to 8884020101. SMS content order.order.buyer_cancel_order_seller_sms
+INFO 2018-05-07 18:18:13,239 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:18:13,240 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:18:13,240 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:18:13,241 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:18:13,368 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:18:13,369 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:19:01,523 farmzone.buyers.views.order Processing Request to cancel order for user 1 & buyer 1
+WARNING 2018-05-07 18:19:01,571 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+WARNING 2018-05-07 18:19:01,572 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:19:01,575 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:19:01,575 farmzone.core.models Contact for the user: Anish#18 is 8884020101
+INFO 2018-05-07 18:19:01,575 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_buyer_sms
+INFO 2018-05-07 18:19:01,575 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:19:01,575 farmzone.notification.sms Sending SMS to 8884020101. SMS content order.order.buyer_cancel_order_seller_sms
+WARNING 2018-05-07 18:19:01,575 farmzone.core.models User 9 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:19:01,575 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_cancel_order_seller_sms
+INFO 2018-05-07 18:19:01,578 farmzone.core.models Contact for the user: Anish#9 is None
+INFO 2018-05-07 18:19:01,987 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:19:01,988 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:19:02,019 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:19:02,020 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:19:02,024 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:19:02,025 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:24:38,104 farmzone.buyers.views.order Processing Request to place order for user 1 & buyer 1
+WARNING 2018-05-07 18:24:38,190 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:24:38,192 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:24:38,193 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_place_order_buyer_sms
+WARNING 2018-05-07 18:24:38,198 farmzone.core.models User 9 didn't have any phone_number marked as primary falling back to return first number
+WARNING 2018-05-07 18:24:38,198 farmzone.core.models User 1 didn't have any phone_number marked as primary falling back to return first number
+INFO 2018-05-07 18:24:38,201 farmzone.core.models Contact for the user: Anish#9 is None
+INFO 2018-05-07 18:24:38,201 farmzone.core.models Contact for the user: Anish#18 is 8884020101
+INFO 2018-05-07 18:24:38,201 farmzone.notification.sms Sending SMS to 8884020101. SMS content order.order.buyer_place_order_seller_sms
+INFO 2018-05-07 18:24:38,201 farmzone.core.models Contact for the user: Arun Singhal#1 is 9891077610
+INFO 2018-05-07 18:24:38,202 farmzone.notification.sms Sending SMS to 9891077610. SMS content order.order.buyer_place_order_seller_sms
+INFO 2018-05-07 18:24:38,787 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:24:38,788 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:24:38,792 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:24:38,793 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:24:38,865 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:24:38,866 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:31:40,498 farmzone.authentication.views Processing SendOTP request for mobile_number: 9891077510, username Arun
+INFO 2018-05-07 18:31:40,500 farmzone.authentication.views Record exists for the mobile number: 9891077510
+INFO 2018-05-07 18:31:40,516 farmzone.core.models Creating new user_app_info entry for user 37 
+INFO 2018-05-07 18:31:40,519 farmzone.sellers.models seller_code is not available in request for user 37 
+INFO 2018-05-07 18:31:41,062 farmzone.authentication.views Request to send OTP has been submitted successfully
+WARNING 2018-05-07 18:33:11,485 farmzone.authentication.views Mobile number or username field is missing during send otp
+WARNING 2018-05-07 18:33:55,014 farmzone.authentication.views Mobile number or username field is missing during send otp
+INFO 2018-05-07 18:34:39,177 farmzone.authentication.views otp 847421, mobile_number 9891077510, session_id e2c10825-5224-11e8-a895-0200cd936042
+ERROR 2018-05-07 18:34:39,607 django.request Internal Server Error: /api/1.0.0/verify-otp/
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/authentication/views.py", line 153, in post
+    notification.send_create_user_notification(user.id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 11, in send_create_user_notification
+    send_sms_to_user_id(user_id, user_keys.user_create_user_user_key, None)
+TypeError: send_sms_to_user_id() takes 2 positional arguments but 3 were given
+ERROR 2018-05-07 18:34:39,666 django.server "POST /api/1.0.0/verify-otp/ HTTP/1.1" 500 112559
+INFO 2018-05-07 18:38:32,932 farmzone.authentication.views otp 847421, mobile_number 9891077510, session_id e2c10825-5224-11e8-a895-0200cd936042
+ERROR 2018-05-07 18:38:33,325 django.request Internal Server Error: /api/1.0.0/verify-otp/
+Traceback (most recent call last):
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 489, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 449, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/arun/software/venv/lib/python3.5/site-packages/rest_framework/views.py", line 486, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/authentication/views.py", line 153, in post
+    notification.send_create_user_notification(user.id)
+  File "/home/arun/software/mystuff/git/platform-service/farmzone/notification/notification.py", line 11, in send_create_user_notification
+    send_sms_to_user_id(user_id, user_keys.user_create_user_user_key, user_id=user_id)
+TypeError: send_sms_to_user_id() got multiple values for argument 'user_id'
+ERROR 2018-05-07 18:38:33,382 django.server "POST /api/1.0.0/verify-otp/ HTTP/1.1" 500 112610
+INFO 2018-05-07 18:38:54,224 farmzone.authentication.views otp 847421, mobile_number 9891077510, session_id e2c10825-5224-11e8-a895-0200cd936042
+INFO 2018-05-07 18:38:54,681 farmzone.core.models Contact for the user: Arun#37 is 9891077510
+INFO 2018-05-07 18:38:54,681 farmzone.notification.sms Sending SMS to 9891077510. SMS content user.user.user_create_user_user_sms
+INFO 2018-05-07 18:38:55,083 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:38:55,084 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:39:24,356 farmzone.authentication.views otp 847421, mobile_number 9891077510, session_id e2c10825-5224-11e8-a895-0200cd936042
+INFO 2018-05-07 18:39:24,839 farmzone.core.models Contact for the user: Arun#37 is 9891077510
+INFO 2018-05-07 18:39:24,840 farmzone.notification.sms Sending SMS to 9891077510. SMS content user.user.user_create_user_user_sms
+INFO 2018-05-07 18:39:25,220 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:39:25,220 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:42:45,779 farmzone.authentication.views otp 847421, mobile_number 9891077510, session_id e2c10825-5224-11e8-a895-0200cd936042
+INFO 2018-05-07 18:42:46,248 farmzone.core.models Contact for the user: Arun#37 is 9891077510
+INFO 2018-05-07 18:42:46,248 farmzone.notification.sms Sending SMS to 9891077510. SMS content user.user.user_create_user_user_sms
+INFO 2018-05-07 18:42:46,958 farmzone.notification.sms {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+WARNING 2018-05-07 18:42:46,958 farmzone.notification.sms SMS sending failed. Rsponse from exotel - {'RestException': {'Status': 403, 'Message': 'Not allowed to send promotional SMS(s).'}}
+INFO 2018-05-07 18:42:59,979 farmzone.authentication.views otp 847421, mobile_number 9891077510, session_id e2c10825-5224-11e8-a895-0200cd936042
