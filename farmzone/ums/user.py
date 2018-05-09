@@ -1,4 +1,4 @@
-from farmzone.sellers.models import PreferredSeller
+from farmzone.sellers.models import PreferredSeller, Seller
 from farmzone.ums.serializers import PreferredSellerSerializer, UserSellersSerializer
 import logging
 logger = logging.getLogger(__name__)
@@ -22,3 +22,7 @@ def get_user_sellers(user_id):
 
 def get_user_sellers_serializer():
     return UserSellersSerializer
+
+
+def get_user_unassociated_sellers(user_id):
+    return Seller.objects.filter(is_active=True).exclude(preferredseller__user__id=user_id).values("seller_code", "name")

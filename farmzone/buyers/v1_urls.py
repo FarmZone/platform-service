@@ -7,7 +7,7 @@ from farmzone.buyers.views.product import BuyerProductsByCategoryView, BuyerProd
     , AddMyProduct, MyProductsViewSet, UpdateMyProduct
 from farmzone.buyers.views.support import BuyerPendingQueriesViewSet, BuyerResolvedQueriesViewSet, SaveQueryView, ResolveQueryView
 from farmzone.buyers.views.cart import CartDetailView, AddToCartView
-from farmzone.buyers.views.user import MySellersViewSet
+from farmzone.buyers.views.user import MySellersViewSet, UnassociatedSellersView
 
 urlpatterns = [
     url(r'buyer/(?P<user_id>[\w]+)/cart_detail/?$', CartDetailView.as_view()),
@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'buyer/(?P<user_id>[\w]+)/add_my_product/?$', AddMyProduct.as_view()),
     url(r'buyer/(?P<user_id>[\w]+)/my_products/?$', MyProductsViewSet.as_view({'get': 'list'})),
     url(r'buyer/(?P<user_id>[\w]+)/update_my_product/?$', UpdateMyProduct.as_view()),
+    url(r'buyer/(?P<user_id>[\w]+)/get_unassociated_sellers/?$', UnassociatedSellersView.as_view()),
 ]
