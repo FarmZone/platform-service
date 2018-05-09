@@ -7,7 +7,8 @@ class UserProductsSerializer(serializers.ModelSerializer):
     seller = SellerSerializer()
     product_name = serializers.CharField
     product_serial_no = serializers.CharField
+    id = serializers.IntegerField
 
     class Meta:
         model = UserProduct
-        fields = ('seller', 'product_name', 'product_serial_no')
+        fields = ('seller', 'product_name', 'product_serial_no', 'id')

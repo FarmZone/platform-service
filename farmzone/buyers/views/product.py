@@ -1,7 +1,7 @@
 from .base import BaseAPIView, BaseModelViewSet
 from rest_framework.response import Response
 from farmzone.cms.product import get_buyer_products_summary, get_buyer_products_by_category\
-    , get_buyer_product_detail, add_user_product, get_user_products, get_user_products_serializer
+    , get_buyer_product_detail, add_user_product, get_user_products, get_user_products_serializer, update_user_product
 from farmzone.settings.common import PAGINATION_DEFAULT_PER_PAGE_RECORD_COUNT
 from rest_framework.views import Response, status
 import logging
@@ -57,6 +57,23 @@ class AddMyProduct(BaseAPIView):
                             status.HTTP_400_BAD_REQUEST)
         add_user_product(seller_code, product_name, product_serial_no, user_id)
         return Response({"details": "Product added successfully",
+                         "status_code": "SUCCESS"},
+                        status.HTTP_200_OK)
+
+
+class UpdateMyProduct(BaseAPIView):
+    def post(self, request, user_id=None, app_version=None):
+        id = request.data.get('id')
+        seller_code = request.data.get('seller_code')
+        product_name = request.data.get('product_name')
+        product_serial_no = request.data.get('product_serial_no')
+        if not id or not seller_code or not product_name or not product_serial_no:
+            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Please provide id, seller_code, product_name, product_serial_no parameter",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_400_BAD_REQUEST)
+        update_user_product(seller_code, product_name, product_serial_no, user_id, id)
+        return Response({"details": "Product updated successfully",
                          "status_code": "SUCCESS"},
                         status.HTTP_200_OK)
 
