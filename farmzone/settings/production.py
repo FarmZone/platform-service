@@ -44,6 +44,11 @@ EXOTEL_TOKEN = os.environ.get('EXOTEL_TOKEN', '85af8ff6b716f8e5fdc00332664ff5142
 EXO_PHONE = os.environ.get('EXO_PHONE', '09513886363')
 IVR_AUTH_TOKEN = os.environ.get('IVR_AUTH_TOKEN')
 
+MSG91_TOKEN = os.environ.get('MSG91_TOKEN')
+MSG91_TSMS_ROUTE = os.environ.get('MSG91_TSMS_ROUTE', '4')
+MSG91_COUNTRY = os.environ.get('MSG91_COUNTRY', '91')
+MSG91_SENDER = os.environ.get('MSG91_SENDER', 'AAagri')
+
 BUGSNAG = {
   'api_key': os.environ.get('BUGSNAG_KEY'),
   'project_root': PROJECT_ROOT,
