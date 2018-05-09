@@ -7,7 +7,7 @@ OTP_STATUS = {
 }
 
 # {0} = api_key, {1} = customer's mobile number
-TWO_FACTOR_OTP_REQUEST_URL = 'https://2factor.in/API/V1/{0}/SMS/+91{1}/AUTOGEN/Login'
+TWO_FACTOR_OTP_REQUEST_URL = 'https://2factor.in/API/V1/{0}/SMS/+91{1}/AUTOGEN/OTP_Template'
 
 # {0} = api_key, {1} = OTP session ID returned by Two factor, {2} = otp to be verified
 TWO_FACTOR_OTP_VERIFICATION_URL = 'https://2factor.in/API/V1/{0}/SMS/VERIFY/{1}/{2}'
