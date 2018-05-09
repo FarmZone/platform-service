@@ -29,7 +29,7 @@ class AddSellerView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide seller_code parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         add_seller(seller_code, user_id)
         return Response({"details": "Seller added successfully",
                          "status_code": "SUCCESS"},

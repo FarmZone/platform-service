@@ -51,7 +51,7 @@ class PlaceOrder(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(data))
             return Response({"details": "Please provide id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_404_NOT_FOUND)
+                            status.HTTP_200_OK)
         logger.info("Processing Request to place order for user {0} & buyer {1}".format(request.user.id, user_id))
         place_order(user_id, cart_id)
         return Response({"details": "Order placed successfully",
@@ -68,7 +68,7 @@ class CancelOrder(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(data))
             return Response({"details": "Please provide id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_404_NOT_FOUND)
+                            status.HTTP_200_OK)
         logger.info("Processing Request to cancel order for user {0} & buyer {1}".format(request.user.id, user_id))
         cancel_order(user_id, order_id)
         return Response({"details": "Order cancelled successfully",
@@ -85,7 +85,7 @@ class SaveOrderRatingView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide order_detail_id and rating parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         save_order_rating(order_detail_id, rating, user_id)
         return Response({"details": "Rating saved successfully",
                              "status_code": "SUCCESS"},
@@ -101,18 +101,18 @@ class CompleteOrderView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide order_detail_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         if not product_identifiers:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide product_identifiers parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         product_identifiers_set = set(product_identifiers)
         if len(product_identifiers)!= len(product_identifiers_set):
             logger.info("Duplicate product identifiers. Requested params {0}".format(request.data))
             return Response({"details": "Please provide unique product identifiers",
                              "status_code": "DUPLICATE_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         complete_order(order_detail_id, user_id, product_identifiers)
         return Response({"details": "Order completed successfully",
                              "status_code": "SUCCESS"},

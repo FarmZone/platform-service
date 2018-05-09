@@ -2,7 +2,7 @@ from rest_framework.exceptions import APIException, ValidationError
 
 
 class CustomAPI404Exception(APIException):
-    status_code = 404
+    status_code = 200
 
     def __init__(self, detail=None):
         if isinstance(detail, dict):
@@ -17,7 +17,7 @@ class CustomAPI404Exception(APIException):
 
 
 class CustomAPI400Exception(APIException):
-    status_code = 400
+    status_code = 200
 
     def __init__(self, detail):
         if isinstance(detail, dict):

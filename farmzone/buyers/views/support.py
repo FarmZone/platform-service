@@ -39,12 +39,12 @@ class SaveQueryView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide support_category_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         if not(seller_code or order_detail_id):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Either seller_code or order_detail_id is mandatory",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no)
         return Response({"details": "Query added successfully",
                              "status_code": "SUCCESS"},
@@ -59,7 +59,7 @@ class ResolveQueryView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide query_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         resolve_query(query_id, user_id)
         return Response({"details": "Query resolved successfully",
                              "status_code": "SUCCESS"},

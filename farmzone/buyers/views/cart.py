@@ -25,11 +25,11 @@ class AddToCartView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(data))
             return Response({"details": "Please provide seller_sub_product_id and qty parameters",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_404_NOT_FOUND)
+                            status.HTTP_200_OK)
         if not (isinstance(qty, int) and qty >= 0):
             return Response({"details": "qty must be a valid positive integer",
                              "status_code": "INVALID_REQUIRED_FIELDS"},
-                            status.HTTP_404_NOT_FOUND)
+                            status.HTTP_200_OK)
         logger.info("Processing Request to add item in cart for user {0} & buyer {1}".format(request.user.id, user_id))
         add_to_cart(user_id, seller_sub_product_id, qty)
         return Response({"details": "Cart updated successfully",

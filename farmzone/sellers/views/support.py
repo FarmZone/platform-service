@@ -33,7 +33,7 @@ class AcceptQueryView(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide query_id parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         accept_query(query_id, seller_code)
         return Response({"details": "Query accepted successfully",
                              "status_code": "SUCCESS"},

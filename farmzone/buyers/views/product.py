@@ -54,7 +54,7 @@ class AddMyProduct(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide seller_code, product_name, product_serial_no parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         add_user_product(seller_code, product_name, product_serial_no, user_id)
         return Response({"details": "Product added successfully",
                          "status_code": "SUCCESS"},
@@ -71,7 +71,7 @@ class UpdateMyProduct(BaseAPIView):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Please provide id, seller_code, product_name, product_serial_no parameter",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
-                            status.HTTP_400_BAD_REQUEST)
+                            status.HTTP_200_OK)
         update_user_product(seller_code, product_name, product_serial_no, user_id, id)
         return Response({"details": "Product updated successfully",
                          "status_code": "SUCCESS"},

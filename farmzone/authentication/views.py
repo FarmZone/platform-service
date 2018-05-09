@@ -103,7 +103,7 @@ class SendOTPView(APIView):
             return Response({
                 "status_code": "UNABLE_TO_REGISTER_USER",
                 "details": "Exception while registering user"
-            }, status.HTTP_400_BAD_REQUEST)
+            }, status.HTTP_200_OK)
 
     def post(self, request, app_version=None):
         mobile_number = request.data.get('mobile_number')
@@ -113,7 +113,7 @@ class SendOTPView(APIView):
             return Response({
                 "status_code": "MISSING_REQUIRED_FIELD",
                 "details": "Missing on of the required field"
-            }, status.HTTP_400_BAD_REQUEST)
+            }, status.HTTP_200_OK)
         logger.info("Processing SendOTP request for mobile_number: {0}, username {1}".format(mobile_number, user_name))
         return self.execute(mobile_number, user_name, request, app_version)
 
@@ -144,7 +144,7 @@ class VerifyOTPView(APIView):
                     return Response({
                         'status_code': 'PHONE_NUMBER_DOES_NOT_EXIST',
                         'details': 'This phone number does not exist'
-                    }, status.HTTP_404_NOT_FOUND)
+                    }, status.HTTP_200_OK)
                 try:
                     user = phone_number_record.user
                     auth_token = Token.objects.get(user=user)
@@ -156,12 +156,12 @@ class VerifyOTPView(APIView):
                 except Token.DoesNotExist:
                     return Response(
                         {'status_code': 'TOKEN_DOES_NOT_EXIST', 'details': 'No auth token found for this user'},
-                        status.HTTP_400_BAD_REQUEST
+                        status.HTTP_200_OK
                     )
                 OTP_STATUS['verified']['auth_token'] = auth_token.key
                 return Response(OTP_STATUS['verified'], status.HTTP_200_OK)
-            return Response(OTP_STATUS['verification_failed'], status.HTTP_400_BAD_REQUEST)
-        return Response({'status': 'failed', 'details': 'OTP or session id not provided'}, status.HTTP_400_BAD_REQUEST)
+            return Response(OTP_STATUS['verification_failed'], status.HTTP_200_OK)
+        return Response({'status': 'failed', 'details': 'OTP or session id not provided'}, status.HTTP_200_OK)
 
 
 class SaveAddressView(APIView):
@@ -179,14 +179,14 @@ class SaveAddressView(APIView):
             return Response({
                 "status_code": "MISSING_REQUIRED_FIELD",
                 "details": "Missing on of the required field user or state_code"
-            }, status.HTTP_400_BAD_REQUEST)
+            }, status.HTTP_200_OK)
         state_obj = StateCode.objects.filter(code=state_code).first()
         if not state_obj:
             logger.warning("State code does not match any state {0}".format(state_code))
             return Response({
                 "status_code": "INVALID_REQUIRED_FIELD",
                 "details": "State code does not match any state"
-            }, status.HTTP_400_BAD_REQUEST)
+            }, status.HTTP_200_OK)
         Address.create_update_address(user, state_obj, address_line1, address_line2, address_line3)
         return Response({
             "status_code": "SUCCESS",
