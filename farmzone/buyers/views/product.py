@@ -52,11 +52,11 @@ class AddMyProduct(BaseAPIView):
         product_serial_no = request.data.get('product_serial_no')
         if not seller_code or not product_name or not product_serial_no:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide seller_code, product_name, product_serial_no parameter",
+            return Response({"details": "Either seller code or product name or product id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         add_user_product(seller_code, product_name, product_serial_no, user_id)
-        return Response({"details": "Product added successfully",
+        return Response({"details": "Product added successfully.",
                          "status_code": "SUCCESS"},
                         status.HTTP_200_OK)
 
@@ -69,11 +69,11 @@ class UpdateMyProduct(BaseAPIView):
         product_serial_no = request.data.get('product_serial_no')
         if not id or not seller_code or not product_name or not product_serial_no:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide id, seller_code, product_name, product_serial_no parameter",
+            return Response({"details": "Either seller code or product name or product id or id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         update_user_product(seller_code, product_name, product_serial_no, user_id, id)
-        return Response({"details": "Product updated successfully",
+        return Response({"details": "Product updated successfully.",
                          "status_code": "SUCCESS"},
                         status.HTTP_200_OK)
 

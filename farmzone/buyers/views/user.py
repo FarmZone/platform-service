@@ -27,10 +27,10 @@ class AddSellerView(BaseAPIView):
         seller_code = request.data.get('seller_code')
         if not seller_code:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide seller_code parameter",
+            return Response({"details": "Seller code is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         add_seller(seller_code, user_id)
-        return Response({"details": "Seller added successfully",
+        return Response({"details": "Seller added successfully.",
                          "status_code": "SUCCESS"},
                         status.HTTP_200_OK)

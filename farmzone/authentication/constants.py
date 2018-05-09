@@ -1,9 +1,9 @@
 OTP_STATUS = {
-    "sent": {'status': 'success', 'details': 'OTP sent'},
-    "not_sent": {'status': 'failed', 'details': 'Could not send the OTP. Please try again'},
-    "ignored": {'status': 'success', 'details': 'OTP has already been sent'},
-    "verified": {'status': 'success', 'details': 'OTP matched'},
-    "verification_failed": {'status': 'failed', 'details': 'Incorrect OTP, Please try again'}
+    "sent": {'status': 'success', 'details': 'OTP sent successfully.'},
+    "not_sent": {'status': 'failed', 'details': 'We could not send OTP. Please try again.'},
+    "ignored": {'status': 'success', 'details': 'OTP has already been sent.'},
+    "verified": {'status': 'success', 'details': 'OTP verified successfully'},
+    "verification_failed": {'status': 'failed', 'details': 'Incorrect OTP, Please try again.'}
 }
 
 # {0} = api_key, {1} = customer's mobile number

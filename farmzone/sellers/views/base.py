@@ -17,7 +17,7 @@ class BaseAPIView(APIView):
             raise CustomAPI404Exception(
                 {
                     "status_code": "INCORRECT_ID",
-                    "details": "No record exists for specified seller_code"
+                    "details": "We could not find any seller associated with you."
                 }
             )
         return seller

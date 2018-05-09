@@ -100,9 +100,10 @@ class SendOTPView(APIView):
                 self.existing_user_onboarding(phone_number.user, user_name, request, app_version)
             return send_otp(phone_number)
         except IntegrityError as e:
+            logger.debug("Error while registering user {0}".format(e))
             return Response({
                 "status_code": "UNABLE_TO_REGISTER_USER",
-                "details": "Exception while registering user"
+                "details": "We are unable to register user. Please contact admin."
             }, status.HTTP_200_OK)
 
     def post(self, request, app_version=None):
@@ -112,7 +113,7 @@ class SendOTPView(APIView):
             logger.warning("Mobile number or username field is missing during send otp")
             return Response({
                 "status_code": "MISSING_REQUIRED_FIELD",
-                "details": "Missing on of the required field"
+                "details": "Either mobile number or username is missing."
             }, status.HTTP_200_OK)
         logger.info("Processing SendOTP request for mobile_number: {0}, username {1}".format(mobile_number, user_name))
         return self.execute(mobile_number, user_name, request, app_version)
@@ -143,7 +144,7 @@ class VerifyOTPView(APIView):
                 except PhoneNumber.DoesNotExist:
                     return Response({
                         'status_code': 'PHONE_NUMBER_DOES_NOT_EXIST',
-                        'details': 'This phone number does not exist'
+                        'details': 'This phone number does not exist.'
                     }, status.HTTP_200_OK)
                 try:
                     user = phone_number_record.user
@@ -155,13 +156,13 @@ class VerifyOTPView(APIView):
                         user.save()
                 except Token.DoesNotExist:
                     return Response(
-                        {'status_code': 'TOKEN_DOES_NOT_EXIST', 'details': 'No auth token found for this user'},
+                        {'status_code': 'TOKEN_DOES_NOT_EXIST', 'details': 'Auth token not found for this user.'},
                         status.HTTP_200_OK
                     )
                 OTP_STATUS['verified']['auth_token'] = auth_token.key
                 return Response(OTP_STATUS['verified'], status.HTTP_200_OK)
             return Response(OTP_STATUS['verification_failed'], status.HTTP_200_OK)
-        return Response({'status': 'failed', 'details': 'OTP or session id not provided'}, status.HTTP_200_OK)
+        return Response({'status': 'failed', 'details': 'Either OTP or session id or mobile number is missing.'}, status.HTTP_200_OK)
 
 
 class SaveAddressView(APIView):
@@ -178,14 +179,14 @@ class SaveAddressView(APIView):
             logger.warning("user and state_code is mandatory")
             return Response({
                 "status_code": "MISSING_REQUIRED_FIELD",
-                "details": "Missing on of the required field user or state_code"
+                "details": "Please select state."
             }, status.HTTP_200_OK)
         state_obj = StateCode.objects.filter(code=state_code).first()
         if not state_obj:
             logger.warning("State code does not match any state {0}".format(state_code))
             return Response({
                 "status_code": "INVALID_REQUIRED_FIELD",
-                "details": "State code does not match any state"
+                "details": "State code does not match any state."
             }, status.HTTP_200_OK)
         Address.create_update_address(user, state_obj, address_line1, address_line2, address_line3)
         return Response({

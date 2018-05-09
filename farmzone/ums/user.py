@@ -34,14 +34,14 @@ def add_seller(seller_code, user_id):
     if not seller:
         logger.info("Seller not found for given code {0}".format(seller_code))
         raise CustomAPI400Exception({
-            "details": "Given seller_code is not a valid code",
+            "details": "Seller code is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     duplicate = PreferredSeller.objects.filter(seller=seller, user_id=user_id).first()
     if duplicate:
         logger.info("Seller code already exists {0}".format(seller_code))
         raise CustomAPI400Exception({
-            "details": "Given seller is already associated with user",
+            "details": "This seller is already associated.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     PreferredSeller.add_seller(seller, user_id)

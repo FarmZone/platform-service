@@ -47,11 +47,11 @@ class AcceptOrderView(BaseAPIView):
         order_detail_id = request.data.get('order_detail_id')
         if not order_detail_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide order_detail_id parameter",
+            return Response({"details": "Order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         accept_order(order_detail_id, seller_code)
-        return Response({"details": "Order accepted successfully",
+        return Response({"details": "Order accepted successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
 
@@ -62,10 +62,10 @@ class DispatchOrderView(BaseAPIView):
         order_detail_id = request.data.get('order_detail_id')
         if not order_detail_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide order_detail_id parameter",
+            return Response({"details": "Order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         dispatch_order(order_detail_id, seller_code)
-        return Response({"details": "Order dispatched successfully",
+        return Response({"details": "Order marked dispatched successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

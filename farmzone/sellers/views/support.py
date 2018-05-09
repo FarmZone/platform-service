@@ -31,11 +31,11 @@ class AcceptQueryView(BaseAPIView):
         query_id = request.data.get('query_id')
         if not query_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide query_id parameter",
+            return Response({"details": "Complain id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         accept_query(query_id, seller_code)
-        return Response({"details": "Query accepted successfully",
+        return Response({"details": "Complain accepted successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
 

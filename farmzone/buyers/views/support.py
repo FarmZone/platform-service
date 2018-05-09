@@ -37,16 +37,16 @@ class SaveQueryView(BaseAPIView):
         support_status = SupportStatus.NEW.value
         if not support_category_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide support_category_id parameter",
+            return Response({"details": "Complain category id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         if not(seller_code or order_detail_id):
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Either seller_code or order_detail_id is mandatory",
+            return Response({"details": "Either seller code or order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no)
-        return Response({"details": "Query added successfully",
+        return Response({"details": "Complain registered successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
 
@@ -57,10 +57,10 @@ class ResolveQueryView(BaseAPIView):
         query_id = request.data.get('query_id')
         if not query_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide query_id parameter",
+            return Response({"details": "Complain id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         resolve_query(query_id, user_id)
-        return Response({"details": "Query resolved successfully",
+        return Response({"details": "Complain marked resolved successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

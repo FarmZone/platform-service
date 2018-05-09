@@ -49,12 +49,12 @@ class PlaceOrder(BaseAPIView):
 
         if not cart_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(data))
-            return Response({"details": "Please provide id parameter",
+            return Response({"details": "Cart id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         logger.info("Processing Request to place order for user {0} & buyer {1}".format(request.user.id, user_id))
         place_order(user_id, cart_id)
-        return Response({"details": "Order placed successfully",
+        return Response({"details": "Order placed successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
 
@@ -66,12 +66,12 @@ class CancelOrder(BaseAPIView):
 
         if not order_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(data))
-            return Response({"details": "Please provide id parameter",
+            return Response({"details": "Order id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         logger.info("Processing Request to cancel order for user {0} & buyer {1}".format(request.user.id, user_id))
         cancel_order(user_id, order_id)
-        return Response({"details": "Order cancelled successfully",
+        return Response({"details": "Order cancelled successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
 
@@ -83,11 +83,11 @@ class SaveOrderRatingView(BaseAPIView):
         order_detail_id = request.data.get('order_detail_id')
         if not order_detail_id or not rating:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide order_detail_id and rating parameter",
+            return Response({"details": "Either rating or order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         save_order_rating(order_detail_id, rating, user_id)
-        return Response({"details": "Rating saved successfully",
+        return Response({"details": "Rating saved successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)
 
@@ -99,21 +99,21 @@ class CompleteOrderView(BaseAPIView):
         product_identifiers = request.data.get('product_identifiers')
         if not order_detail_id:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide order_detail_id parameter",
+            return Response({"details": "Order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         if not product_identifiers:
             logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide product_identifiers parameter",
+            return Response({"details": "Product unique id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         product_identifiers_set = set(product_identifiers)
         if len(product_identifiers)!= len(product_identifiers_set):
             logger.info("Duplicate product identifiers. Requested params {0}".format(request.data))
-            return Response({"details": "Please provide unique product identifiers",
+            return Response({"details": "Product id already exists. Please provide unique id.",
                              "status_code": "DUPLICATE_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         complete_order(order_detail_id, user_id, product_identifiers)
-        return Response({"details": "Order completed successfully",
+        return Response({"details": "Order marked delivered successfully.",
                              "status_code": "SUCCESS"},
                             status.HTTP_200_OK)

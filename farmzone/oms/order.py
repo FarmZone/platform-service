@@ -172,7 +172,7 @@ def place_order(user_id, id):
     item_count = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value).count()
     if item_count == 0:
         raise CustomAPI400Exception({
-            "details": "Given id is not a valid cart id for this user or item in cart is zero",
+            "details": "Cart items are no longer available.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     total_price = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status=OrderStatus.CART.value)\
@@ -193,7 +193,7 @@ def cancel_order(user_id, id):
     item_count = OrderDetail.objects.filter(order_id=id, order__user_id=user_id, status__in=ORDER_CANCELLED_STATUS).count()
     if item_count == 0:
         raise CustomAPI400Exception({
-            "details": "Given id is not a valid order id for this user or item in order is zero",
+            "details": "Cart does not have items which can be cancelled.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     with transaction.atomic():
@@ -207,7 +207,7 @@ def save_order_rating(order_detail_id, rating, user_id):
     order_detail = OrderDetail.objects.filter(id=order_detail_id, order__user_id=user_id).first()
     if not order_detail:
         raise CustomAPI400Exception({
-            "details": "Given id is not a valid order id for this user or item in order is zero",
+            "details": "Order item id is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     with transaction.atomic():
@@ -220,13 +220,13 @@ def accept_order(order_detail_id, seller_code):
     if not order_detail:
         logger.info("order_detail_id does not match any order detail {0} for given seller {1}".format(order_detail_id, seller_code))
         raise CustomAPI400Exception({
-            "details": "Given order_detail_id is not a valid id for this seller",
+            "details": "Order item id is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     if order_detail.status != OrderStatus.NEW.value:
         logger.info("Order status is not in New state to accept {0}".format(order_detail.status))
         raise CustomAPI400Exception({
-            "details": "Order Detail is not in valid state of New",
+            "details": "Order item is not in new state.",
             "status_code": "INVALID_ORDER_DETAIL_STATE"
         })
     logger.info("Processing Request to accept order detail for seller {0}".format(seller_code))
@@ -244,13 +244,13 @@ def dispatch_order(order_detail_id, seller_code):
     if not order_detail:
         logger.info("order_detail_id does not match any order detail {0} for given seller {1}".format(order_detail_id, seller_code))
         raise CustomAPI400Exception({
-            "details": "Given order_detail_id is not a valid id for this seller",
+            "details": "Order item id is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     if order_detail.status != OrderStatus.ACCEPTED.value:
         logger.info("Order status is not in Accept state to dispatch {0}".format(order_detail.status))
         raise CustomAPI400Exception({
-            "details": "Order Detail is not in valid state of Accept",
+            "details": "Order item is not in accepted state.",
             "status_code": "INVALID_ORDER_DETAIL_STATE"
         })
     logger.info("Processing Request to dispatch order detail for seller {0}".format(seller_code))
@@ -268,13 +268,13 @@ def complete_order(order_detail_id, user_id, product_identifiers):
     if not order_detail:
         logger.info("order_detail_id does not match any order detail {0} for given user {1}".format(order_detail_id, user_id))
         raise CustomAPI400Exception({
-            "details": "Given order_detail_id is not a valid id for this user",
+            "details": "Order item id is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     if order_detail.status != OrderStatus.DISPATCHED.value:
         logger.info("Order status is not in dispatched state to complete {0}".format(order_detail.status))
         raise CustomAPI400Exception({
-            "details": "Order Detail is not in valid state of Dispatched",
+            "details": "Order item is not in dispatched state.",
             "status_code": "INVALID_ORDER_DETAIL_STATE"
         })
     logger.info("product_identifiers {0}".format(product_identifiers))
@@ -283,7 +283,7 @@ def complete_order(order_detail_id, user_id, product_identifiers):
     if duplicate:
         logger.info("Product Identifiers already exists {0}".format(product_identifiers))
         raise CustomAPI400Exception({
-            "details": "Product Identifiers already exists",
+            "details": "Product unique id already exists. Please provide unique id.",
             "status_code": "INVALID_PRODUCT_IDENTIFIER"
         })
     with transaction.atomic():

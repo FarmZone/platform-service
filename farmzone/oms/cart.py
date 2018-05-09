@@ -19,7 +19,7 @@ def add_to_cart(user_id, seller_sub_product_id, qty):
                                                          seller__is_active=True).first()
     if not seller_sub_product:
         raise CustomAPI400Exception({
-            "details": "Seller_sub_product_id is either not active or does not exist",
+            "details": "This product is no longer available.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
 
@@ -28,7 +28,7 @@ def add_to_cart(user_id, seller_sub_product_id, qty):
         if not order_detail:
             if qty == 0:
                 raise CustomAPI400Exception({
-                    "details": "qty parameter can not be zero",
+                    "details": "Qty must be greater than zero.",
                     "status_code": "INVALID_REQUIRED_FIELDS"
                 })
             order_created = create_cart(user_id)
@@ -39,7 +39,7 @@ def add_to_cart(user_id, seller_sub_product_id, qty):
             if not order_detail_sub_product:
                 if qty == 0:
                     raise CustomAPI400Exception({
-                        "details": "qty parameter can not be zero",
+                        "details": "Qty must be greater than zero.",
                         "status_code": "INVALID_REQUIRED_FIELDS"
                     })
                 order_detail_created = create_cart_detail(order_detail.order, seller_sub_product, qty)

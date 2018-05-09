@@ -17,7 +17,7 @@ class BaseAPIView(APIView):
             raise CustomAPI404Exception(
                 {
                     "status_code": "NO_SELLER_ASSOCIATED",
-                    "details": "This user does not have any seller associated with it"
+                    "details": "We could not find any seller associated with you."
                 }
             )
         return seller

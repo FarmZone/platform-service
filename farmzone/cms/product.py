@@ -146,14 +146,14 @@ def add_user_product(seller_code, product_name, product_serial_no, user_id):
     if not seller:
         logger.info("Seller not found for given code {0}".format(seller_code))
         raise CustomAPI400Exception({
-            "details": "Given seller_code is not a valid code",
+            "details": "Seller code is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     duplicate = UserProduct.objects.filter(product_serial_no=product_serial_no).first()
     if duplicate:
         logger.info("product_serial_no already exists {0}".format(product_serial_no))
         raise CustomAPI400Exception({
-            "details": "Given product_serial_no already exists",
+            "details": "Product id already exists. Please provide unique id.",
             "status_code": "DUPLICATE_REQUIRED_FIELDS"
         })
     UserProduct.add_user_product(seller, product_name, product_serial_no, user_id)
@@ -164,14 +164,14 @@ def update_user_product(seller_code, product_name, product_serial_no, user_id, i
     if not product:
         logger.info("Product not found for given ID {0}".format(id))
         raise CustomAPI400Exception({
-            "details": "Given ID is not a valid product Id",
+            "details": "Product id is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     seller = Seller.objects.filter(seller_code=seller_code).first()
     if not seller:
         logger.info("Seller not found for given code {0}".format(seller_code))
         raise CustomAPI400Exception({
-            "details": "Given seller_code is not a valid code",
+            "details": "Seller code is not valid.",
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     if product.product_serial_no != product_serial_no:
@@ -179,7 +179,7 @@ def update_user_product(seller_code, product_name, product_serial_no, user_id, i
         if duplicate:
             logger.info("product_serial_no already exists {0}".format(product_serial_no))
             raise CustomAPI400Exception({
-                "details": "Given product_serial_no already exists",
+                "details": "Product id already exist. Please provide unique id.",
                 "status_code": "DUPLICATE_REQUIRED_FIELDS"
             })
     UserProduct.update_user_product(seller, product_name, product_serial_no, user_id, id)
