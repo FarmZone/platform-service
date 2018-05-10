@@ -182,6 +182,7 @@ def update_user_product(seller_code, product_name, product_serial_no, user_id, i
                 "details": "Product id already exist. Please provide unique id.",
                 "status_code": "DUPLICATE_REQUIRED_FIELDS"
             })
+    UserProduct.update_user_product(seller, product_name, product_serial_no, user_id, id)
     return UserProductsSerializer(UserProduct.objects.filter(id=id).first()).data
 
 
