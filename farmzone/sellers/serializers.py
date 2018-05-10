@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from farmzone.sellers.models import Seller
+from farmzone.sellers.models import Seller, UserProduct
 
 
 class SellerSerializer(serializers.ModelSerializer):

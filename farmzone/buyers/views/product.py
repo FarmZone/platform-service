@@ -55,9 +55,10 @@ class AddMyProduct(BaseAPIView):
             return Response({"details": "Either seller code or product name or product id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
-        add_user_product(seller_code, product_name, product_serial_no, user_id)
+        product = add_user_product(seller_code, product_name, product_serial_no, user_id)
         return Response({"details": "Product added successfully.",
-                         "status_code": "SUCCESS"},
+                         "status_code": "SUCCESS",
+                         "product":product},
                         status.HTTP_200_OK)
 
 
@@ -72,9 +73,10 @@ class UpdateMyProduct(BaseAPIView):
             return Response({"details": "Either seller code or product name or product id or id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
-        update_user_product(seller_code, product_name, product_serial_no, user_id, id)
+        product = update_user_product(seller_code, product_name, product_serial_no, user_id, id)
         return Response({"details": "Product updated successfully.",
-                         "status_code": "SUCCESS"},
+                         "status_code": "SUCCESS",
+                         "product":product},
                         status.HTTP_200_OK)
 
 

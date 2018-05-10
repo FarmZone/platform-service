@@ -1,7 +1,0 @@
-WARNING 2018-05-08 19:16:42,128 farmzone.authentication.views Mobile number or username field is missing during send otp
-INFO 2018-05-08 19:16:57,447 farmzone.authentication.views Processing SendOTP request for mobile_number: 9891077510, username Arun Singhal
-INFO 2018-05-08 19:16:57,448 farmzone.authentication.views Record exists for the mobile number: 9891077510
-INFO 2018-05-08 19:16:57,465 farmzone.core.models Creating new user_app_info entry for user 37 
-INFO 2018-05-08 19:16:57,472 farmzone.sellers.models seller_code is not available in request for user 37 
-INFO 2018-05-08 19:16:58,168 farmzone.authentication.views Request to send OTP has been submitted successfully
-INFO 2018-05-08 19:18:20,640 farmzone.authentication.views otp 953919, mobile_number 9891077510, session_id 608c5ca6-52f4-11e8-a895-0200cd936042

@@ -156,7 +156,7 @@ def add_user_product(seller_code, product_name, product_serial_no, user_id):
             "details": "Product id already exists. Please provide unique id.",
             "status_code": "DUPLICATE_REQUIRED_FIELDS"
         })
-    UserProduct.add_user_product(seller, product_name, product_serial_no, user_id)
+    return UserProductsSerializer(UserProduct.add_user_product(seller, product_name, product_serial_no, user_id)).data
 
 
 def update_user_product(seller_code, product_name, product_serial_no, user_id, id):
@@ -182,7 +182,7 @@ def update_user_product(seller_code, product_name, product_serial_no, user_id, i
                 "details": "Product id already exist. Please provide unique id.",
                 "status_code": "DUPLICATE_REQUIRED_FIELDS"
             })
-    UserProduct.update_user_product(seller, product_name, product_serial_no, user_id, id)
+    return UserProductsSerializer(UserProduct.update_user_product(seller, product_name, product_serial_no, user_id, id)).data
 
 
 

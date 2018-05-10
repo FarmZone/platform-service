@@ -131,9 +131,9 @@ class UserProduct(TimestampedModel):
 
     @classmethod
     def add_user_product(cls, seller, product_name, product_serial_no, user_id):
-        UserProduct.objects.create(seller=seller, product_name=product_name, product_serial_no=product_serial_no, user_id=user_id)
+        return UserProduct.objects.create(seller=seller, product_name=product_name, product_serial_no=product_serial_no, user_id=user_id)
 
     @classmethod
     def update_user_product(cls, seller, product_name, product_serial_no, user_id, id):
-        UserProduct.objects.filter(id=id).update(seller=seller, product_name=product_name, product_serial_no=product_serial_no,
+        return UserProduct.objects.filter(id=id).update(seller=seller, product_name=product_name, product_serial_no=product_serial_no,
                                    user_id=user_id)
