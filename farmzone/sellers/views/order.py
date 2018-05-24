@@ -46,7 +46,7 @@ class AcceptOrderView(BaseAPIView):
     def post(self, request, seller_code=None, app_version=None):
         order_detail_id = request.data.get('order_detail_id')
         if not order_detail_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -61,7 +61,7 @@ class DispatchOrderView(BaseAPIView):
     def post(self, request, seller_code=None, app_version=None):
         order_detail_id = request.data.get('order_detail_id')
         if not order_detail_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)

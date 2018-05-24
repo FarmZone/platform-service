@@ -37,9 +37,14 @@ class UserProductAdmin(admin.ModelAdmin):
     list_display = ['user', 'seller', 'product_name', 'product_serial_no']
 
 
+class SellerDeviceAdmin(admin.ModelAdmin):
+    list_display = ['user', 'fcm_device']
+    search_fields = ['user__full_name']
+
 
 admin.site.register(Seller, SellerAdmin)
 admin.site.register(SellerOwner, SellerOwnerAdmin)
 admin.site.register(PreferredSeller, PreferredSellerAdmin)
 admin.site.register(SellerSubProduct, SellerSubProductAdmin)
 admin.site.register(UserProduct, UserProductAdmin)
+admin.site.register(SellerDevice, SellerDeviceAdmin)

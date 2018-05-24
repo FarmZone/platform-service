@@ -4,6 +4,7 @@ from django.db import models
 from farmzone.core.models import TimestampedModel, User
 from farmzone.catalog.models import SubProduct
 from django.db.models.signals import post_save
+from push_notifications.models import GCMDevice
 
 logger = logging.getLogger(__name__)
 
@@ -137,3 +138,35 @@ class UserProduct(TimestampedModel):
     def update_user_product(cls, seller, product_name, product_serial_no, user_id, id):
         return UserProduct.objects.filter(id=id).update(seller=seller, product_name=product_name, product_serial_no=product_serial_no,
                                    user_id=user_id)
+
+
+class SellerDevice(TimestampedModel):
+    user = models.ForeignKey(User)
+    fcm_device = models.ForeignKey(GCMDevice)
+
+    class Meta:
+        db_table = "seller_device"
+        verbose_name = "Seller Device"
+        verbose_name_plural = "Seller Devices"
+
+    def __str__(self):
+        return "{0}#{1}".format(self.user.full_name, self.fcm_device)
+
+    @classmethod
+    def add_or_update_seller_device(cls, user, registration_id):
+        seller_device = SellerDevice.objects.filter(user=user).first()
+        if seller_device:
+            seller_device.fcm_device.registration_id = registration_id
+            seller_device.fcm_device.active = 1
+            seller_device.fcm_device.save()
+        else:
+            new_device = GCMDevice.objects.create(
+                name=user.username,
+                active=1,
+                registration_id=registration_id,
+                cloud_message_type='FCM'
+            )
+            SellerDevice.objects.create(
+                user=user,
+                fcm_device=new_device
+            )

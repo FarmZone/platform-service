@@ -22,7 +22,7 @@ class AddToCartView(BaseAPIView):
         qty = data.get('qty')
 
         if not seller_sub_product_id or qty is None:
-            logger.info("Manadatory fields missing. Requested params {0}".format(data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(data))
             return Response({"details": "Either qty or seller sub product id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)

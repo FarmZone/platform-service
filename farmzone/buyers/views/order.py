@@ -48,7 +48,7 @@ class PlaceOrder(BaseAPIView):
         cart_id = data.get('id')
 
         if not cart_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(data))
             return Response({"details": "Cart id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -65,7 +65,7 @@ class CancelOrder(BaseAPIView):
         order_id = data.get('id')
 
         if not order_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(data))
             return Response({"details": "Order id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -82,7 +82,7 @@ class SaveOrderRatingView(BaseAPIView):
         rating = request.data.get('rating')
         order_detail_id = request.data.get('order_detail_id')
         if not order_detail_id or not rating:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Either rating or order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -98,12 +98,12 @@ class CompleteOrderView(BaseAPIView):
         order_detail_id = request.data.get('order_detail_id')
         product_identifiers = request.data.get('product_identifiers')
         if not order_detail_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         if not product_identifiers:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Product unique id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)

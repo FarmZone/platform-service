@@ -36,12 +36,12 @@ class SaveQueryView(BaseAPIView):
         product_serial_no = request.data.get('product_serial_no')
         support_status = SupportStatus.NEW.value
         if not support_category_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Complain category id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
         if not(seller_code or order_detail_id):
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Either seller code or order item id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -56,7 +56,7 @@ class ResolveQueryView(BaseAPIView):
     def post(self, request, user_id=None, app_version=None):
         query_id = request.data.get('query_id')
         if not query_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Complain id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)

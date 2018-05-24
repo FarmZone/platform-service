@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class SellerConfig(AppConfig):
+class BuyerConfig(AppConfig):
     name = 'farmzone.buyers'

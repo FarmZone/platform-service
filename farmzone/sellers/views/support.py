@@ -30,7 +30,7 @@ class AcceptQueryView(BaseAPIView):
     def post(self, request, seller_code=None, app_version=None):
         query_id = request.data.get('query_id')
         if not query_id:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Complain id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)

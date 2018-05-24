@@ -51,7 +51,7 @@ class AddMyProduct(BaseAPIView):
         product_name = request.data.get('product_name')
         product_serial_no = request.data.get('product_serial_no')
         if not seller_code or not product_name or not product_serial_no:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Either seller code or product name or product id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -69,7 +69,7 @@ class UpdateMyProduct(BaseAPIView):
         product_name = request.data.get('product_name')
         product_serial_no = request.data.get('product_serial_no')
         if not id or not seller_code or not product_name or not product_serial_no:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Either seller code or product name or product id or id is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)

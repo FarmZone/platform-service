@@ -1,4 +1,5 @@
-from farmzone.sellers.models import PreferredSeller, Seller
+from farmzone.sellers.models import PreferredSeller, Seller, SellerDevice
+from farmzone.buyers.models import BuyerDevice
 from farmzone.ums.serializers import PreferredSellerSerializer, UserSellersSerializer
 from farmzone.util_config.custom_exceptions import CustomAPI400Exception
 import logging
@@ -45,3 +46,18 @@ def add_seller(seller_code, user_id):
             "status_code": "INVALID_REQUIRED_FIELDS"
         })
     PreferredSeller.add_seller(seller, user_id)
+
+
+def register_seller_device(user, seller_code, registration_id):
+    seller = Seller.objects.filter(seller_code=seller_code).first()
+    if not seller:
+        logger.info("Seller not found for given code {0}".format(seller_code))
+        raise CustomAPI400Exception({
+            "details": "Seller code is not valid.",
+            "status_code": "INVALID_REQUIRED_FIELDS"
+        })
+    SellerDevice.add_or_update_seller_device(user, registration_id)
+
+
+def register_buyer_device(user, user_id, registration_id):
+    BuyerDevice.add_or_update_buyer_device(user, registration_id)

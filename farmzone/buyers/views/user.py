@@ -1,5 +1,6 @@
 from .base import BaseModelViewSet, BaseAPIView
-from farmzone.ums.user import get_user_sellers, get_user_sellers_serializer, get_user_unassociated_sellers, add_seller
+from farmzone.ums.user import get_user_sellers, get_user_sellers_serializer, get_user_unassociated_sellers, add_seller\
+    , register_buyer_device
 from rest_framework.views import Response, status
 import logging
 logger = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ class AddSellerView(BaseAPIView):
     def post(self, request, user_id=None, app_version=None):
         seller_code = request.data.get('seller_code')
         if not seller_code:
-            logger.info("Manadatory fields missing. Requested params {0}".format(request.data))
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
             return Response({"details": "Seller code is missing.",
                              "status_code": "MISSING_REQUIRED_FIELDS"},
                             status.HTTP_200_OK)
@@ -34,3 +35,20 @@ class AddSellerView(BaseAPIView):
         return Response({"details": "Seller added successfully.",
                          "status_code": "SUCCESS"},
                         status.HTTP_200_OK)
+
+
+class RegisterBuyerDeviceView(BaseAPIView):
+
+    def post(self, request, user_id=None, app_version=None):
+        user = self.request.user
+        registration_id = request.data.get('registration_id')
+
+        if not registration_id:
+            logger.info("Mandatory fields missing. Requested params {0}".format(request.data))
+            return Response({"details": "Registration id is missing.",
+                             "status_code": "MISSING_REQUIRED_FIELDS"},
+                            status.HTTP_200_OK)
+        register_buyer_device(user, user_id, registration_id)
+        return Response({"details": "User device registered successfully.",
+                             "status_code": "SUCCESS"},
+                            status.HTTP_200_OK)
