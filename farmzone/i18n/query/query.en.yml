@@ -1,7 +1,7 @@
 en:
-  buyer_save_query_buyer_sms: "Your complain {query_id} has been registered successfully."
-  buyer_save_query_seller_sms: "You have received a complain {query_id}."
-  buyer_resolve_query_buyer_sms: "Complain {query_id} has been resolved successfully."
-  buyer_resolve_query_seller_sms: "Complain {query_id} has been resolved successfully."
-  seller_accept_query_buyer_sms: "Your complain {query_id} has been accepted by seller."
-  seller_accept_query_seller_sms: "You have accepted complain {query_id}."
+  buyer_save_query_buyer_sms: "Your complain/service request {query_id} has been registered successfully."
+  buyer_save_query_seller_sms: "You have received a complain/service request {query_id}."
+  buyer_resolve_query_buyer_sms: "Complain/service request {query_id} has been resolved successfully."
+  buyer_resolve_query_seller_sms: "Complain/service request {query_id} has been resolved successfully."
+  seller_accept_query_buyer_sms: "Your complain/service request {query_id} has been accepted by seller."
+  seller_accept_query_seller_sms: "You have accepted complain/service request {query_id}."
