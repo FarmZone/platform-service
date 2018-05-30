@@ -53,8 +53,8 @@ def resolve_query(query_id, user_id):
     with transaction.atomic():
         support.status = SupportStatus.RESOLVED.value
         support.save()
-    seller_user = get_seller_user_by_query(query_id)
-    notification.send_resolve_query_notification(user_id, query_id, seller_user)
+    seller_users = get_seller_users_by_query(query_id)
+    notification.send_resolve_query_notification(user_id, query_id, seller_users)
 
 
 def accept_query(query_id, seller_code):
@@ -75,9 +75,9 @@ def accept_query(query_id, seller_code):
     with transaction.atomic():
         support.status = SupportStatus.ACCEPTED.value
         support.save()
-    seller_user = get_seller_user_by_query(query_id)
+    seller_users = get_seller_users_by_query(query_id)
     buyer_user = get_buyer_user_by_query(query_id)
-    notification.send_accept_query_notification(query_id, buyer_user, seller_user)
+    notification.send_accept_query_notification(query_id, buyer_user, seller_users)
 
 
 def save_query(support_category_id, order_detail_id, user_id, support_status, comment, seller_code, product_name, product_serial_no):
@@ -116,19 +116,18 @@ def save_query(support_category_id, order_detail_id, user_id, support_status, co
     logger.info("Processing Request to add query for user {0}".format(user_id))
     with transaction.atomic():
         support = Support.add_query(user_id, order_detail, support_category, support_status, comment, seller, product_name, product_serial_no)
-        seller_user = get_seller_user_by_query(support.id)
-        notification.send_save_query_notification(user_id, support.id, seller_user)
+        seller_users = get_seller_users_by_query(support.id)
+        notification.send_save_query_notification(user_id, support.id, seller_users)
 
 
-def get_seller_user_by_query(query_id):
+def get_seller_users_by_query(query_id):
     support = Support.objects.select_related("order_detail", "seller").filter(id=query_id).first()
     if support:
         seller = support.seller if support.seller \
             else support.order_detail.seller_sub_product.seller if support.order_detail else None
         if seller:
-            seller_owner = SellerOwner.objects.select_related("user").filter(seller=seller).first()
-            if seller_owner:
-                return seller_owner.user
+            seller_users = SellerOwner.objects.filter(seller=seller).values_list("user__id",flat=True).distinct()
+            return seller_users
     return None
 
 

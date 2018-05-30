@@ -234,9 +234,9 @@ def accept_order(order_detail_id, seller_code):
         order_detail.status = OrderStatus.ACCEPTED.value
         order_detail.save()
     order = get_order_by_order_detail(order_detail_id)
-    seller_user = get_seller_user_by_order_detail(order_detail_id)
+    seller_users = get_seller_users_by_order_detail(order_detail_id)
     buyer_user = get_buyer_user_by_order_detail(order_detail_id)
-    notification.send_accept_order_notification(order_detail_id, order, buyer_user, seller_user)
+    notification.send_accept_order_notification(order_detail_id, order, buyer_user, seller_users)
 
 
 def dispatch_order(order_detail_id, seller_code):
@@ -258,9 +258,9 @@ def dispatch_order(order_detail_id, seller_code):
         order_detail.status = OrderStatus.DISPATCHED.value
         order_detail.save()
     order = get_order_by_order_detail(order_detail_id)
-    seller_user = get_seller_user_by_order_detail(order_detail_id)
+    seller_users = get_seller_users_by_order_detail(order_detail_id)
     buyer_user = get_buyer_user_by_order_detail(order_detail_id)
-    notification.send_dispatch_order_notification(order_detail_id, order, buyer_user, seller_user)
+    notification.send_dispatch_order_notification(order_detail_id, order, buyer_user, seller_users)
 
 
 def complete_order(order_detail_id, user_id, product_identifiers):
@@ -292,19 +292,18 @@ def complete_order(order_detail_id, user_id, product_identifiers):
         for product_identifier in product_identifiers:
             OrderDetailProductIdentifier.add_order_detail_product_identifier(order_detail_id, product_identifier)
     order = get_order_by_order_detail(order_detail_id)
-    seller_user = get_seller_user_by_order_detail(order_detail_id)
+    seller_users = get_seller_users_by_order_detail(order_detail_id)
     buyer_user = get_buyer_user_by_order_detail(order_detail_id)
-    notification.send_complete_order_notification(order_detail_id, order, buyer_user, seller_user)
+    notification.send_complete_order_notification(order_detail_id, order, buyer_user, seller_users)
 
 
-def get_seller_user_by_order_detail(order_detail_id):
+def get_seller_users_by_order_detail(order_detail_id):
     order_detail = OrderDetail.objects.select_related("seller_sub_product", "seller_sub_product__seller").filter(id=order_detail_id).first()
     if order_detail:
         seller = order_detail.seller_sub_product.seller
         if seller:
-            seller_owner = SellerOwner.objects.select_related("user").filter(seller=seller).first()
-            if seller_owner:
-                return seller_owner.user
+            seller_users = SellerOwner.objects.filter(seller=seller).values_list("user__id",flat=True).distinct()
+            return seller_users
     return None
 
 
